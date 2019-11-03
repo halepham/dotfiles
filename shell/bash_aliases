@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# some more ls aliases
+alias ll='ls -alhF --group-directories-first'
+alias la='ls -A'
+alias l='ls -CF'
+
+# aliases add by user
+alias lt='ls -alFht'
+
+alias h='history'
+
+alias dt="date '+%A %B %d %Y %H:%M:%S'"
+
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+alias ai='sudo apt-get install'
+alias ar='sudo apt-get remove'
+alias aar='sudo apt autoremove'
+alias au='sudo apt-get update'
+alias aug='sudo apt-get upgrade'
+
+alias vim='nvim'
+
+alias rlb='source ~/.bashrc'
+alias vib='vim ~/.bashrc'
+alias vips='vim ~/.dotfiles/shell/bash_prompt'
+alias vial='vim ~/.dotfiles/shell/bash_aliases'
+alias vipr='vim ~/.profile'
+alias viv='vim ~/.config/nvim/init.vim'
+
+alias cdc='cd /media/halepham/C_DRIVE'
+alias cdd='cd /media/halepham/D_DRIVE'
+alias cde='cd /media/halepham/EXTENDED'
+
+alias csa='conda activate'
+alias csd='conda deactivate'
+
+alias tbw='~/.dotfiles/tbw.sh'
+
+alias py='python3'
+
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
+
