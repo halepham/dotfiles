@@ -1,37 +1,26 @@
 #!/bin/bash
 
 git_branch() {
-    BRANCH=$( git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' )
-    if [ -z $BRANCH ]
-    then
-        if [ -z $CONDA_DEFAULT_ENV ]
-        then
-            echo '○ '
-        else
-            echo
-        fi
-    else
-        echo "$BRANCH "
-    fi
+    # Check if the current directory is in a Git repository.
+    git rev-parse --is-inside-work-tree &>/dev/null || \
+        ( [ -z $CONDA_DEFAULT_ENV ] && echo -n '○' ) || return
+
+    BRANCH+="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+		git describe --all --exact-match HEAD 2> /dev/null || \
+		git rev-parse --short HEAD 2> /dev/null) "
+    echo "$BRANCH"
 }
 
 env_prompt() {
-    if [ -z $CONDA_DEFAULT_ENV ]
+    if [ ! -z $CONDA_DEFAULT_ENV ]
     then
-        echo
-    else
         echo "$(basename $CONDA_DEFAULT_ENV) "
     fi
 }
 
 check_branch() {
-    BRANCH=$( git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' )
-    if [ -z $BRANCH ]
-    then
-        echo
-    else
-        echo "± "
-    fi
+    # Check if the current directory is in a Git repository.
+    ( git rev-parse --is-inside-work-tree &>/dev/null && echo "± " ) || return
 }
 
 text_color() {

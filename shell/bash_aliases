@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # some more ls aliases
-alias ll='ls -alhF --group-directories-first'
+alias ll='ls -AlhF --group-directories-first'
 alias la='ls -A'
 alias l='ls -CF'
 
