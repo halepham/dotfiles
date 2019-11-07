@@ -2,3 +2,7 @@
 shell/bash_profile
 
 #no backup files
+bkp/
+
+#no update file
+update.sh
