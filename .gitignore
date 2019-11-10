@@ -1,8 +1,5 @@
-#no bash_profile
 shell/bash_profile
-
-#no backup files
 bkp/
-
-#no update file
 update.sh
+tbw.sh
+vim/
