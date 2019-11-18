@@ -19,3 +19,4 @@
 [submodule ".vim/bundle/suda.vim"]
 	path = .vim/bundle/suda.vim
 	url = git@github.com:lambdalisue/suda.vim.git
+    ignore = dirty
