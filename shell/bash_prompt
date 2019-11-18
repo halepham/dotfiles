@@ -5,7 +5,7 @@
 git_branch() {
     # Check if the current directory is in a Git repository.
     git rev-parse --is-inside-work-tree &>/dev/null || \
-        ( [ -z $CONDA_DEFAULT_ENV ] && echo -n '○' ) || return
+        ( [ -z $CONDA_DEFAULT_ENV ] && echo -en "○" ) || return
 
     BRANCH+="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
 		git describe --all --exact-match HEAD 2> /dev/null || \
@@ -13,16 +13,21 @@ git_branch() {
     echo "$BRANCH"
 }
 
+check_branch() {
+    # Check if the current directory is in a Git repository.
+    git rev-parse --is-inside-work-tree &>/dev/null || return
+
+    if [ ! -z $CONDA_DEFAULT_ENV ]
+    then
+        echo "± "
+    fi
+}
+
 env_prompt() {
     if [ ! -z $CONDA_DEFAULT_ENV ]
     then
         echo "$(basename $CONDA_DEFAULT_ENV) "
     fi
-}
-
-check_branch() {
-    # Check if the current directory is in a Git repository.
-    ( git rev-parse --is-inside-work-tree &>/dev/null && echo "± " ) || return
 }
 
 text_color() {
@@ -81,11 +86,9 @@ YELLOW="\[\033[01;33m\]"
 WHITE="\[\033[01;37m\]"
 RESET="\[\e[0m\]"
 
-PROMPT_DIRTRIM=3
 
 PS1="${debian_chroot:+($debian_chroot)}"
-
-PS1+="\[\$(user_color)\]\u$WHITE@$host_color\h$WHITE [$YELLOW\w$WHITE] "
-PS1+="$env_color\$(env_prompt)"
-PS1+="$WHITE\$(check_branch)$git_color\$(git_branch)$RESET▸ "
+PS1+="\[\$(user_color)\]\u$WHITE::$host_color\h$WHITE [$YELLOW\w$WHITE] "
+PS1+="$env_color\$(env_prompt)$WHITE\$(check_branch)$git_color\$(git_branch)"
+PS1+="$RESET▸ "
 
