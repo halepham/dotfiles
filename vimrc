@@ -129,7 +129,7 @@ endif
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
             \ exe "normal! g`\"" | endif
 
-" Indent Line configs indentLine_char_list = ['|', '¦', '┆', '┊']
+" Indent Line configs indentLine_char_list = ['|', '¦', '┆', '┊', '', '']
 let g:indentLine_char_list = ['']
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -251,7 +251,7 @@ let g:lightline = {
             \             [ 'readonly', 'filename', 'modified' ]
             \           ],
             \   'right':[
-            \             [ 'lineinfo' ],
+            \             [ 'lineinfo', 'percent' ],
             \             [ 'linter_warnings', 'linter_errors', 'filetype' ]
             \           ]
             \ },
@@ -269,7 +269,8 @@ let g:lightline = {
             \   'filename':  'LightLineFilename',
             \   'filetype':  'LightLineFiletype',
             \   'mode':      'LightLineMode',
-            \   'lineinfo':  'LightLineLineInfo'
+            \   'percent':   'LightLinePercent',
+            \   'lineinfo':  'LightLineLineInfo',
             \ },
             \'component_expand': {
             \   'linter_warnings': 'LightlineYcmWarnings',
@@ -280,12 +281,12 @@ let g:lightline = {
             \   'linter_errors': 'error',
             \ },
             \ 'separator':      { 'left': "\ue0b0", 'right': "\ue0b2" },
-            \ 'subseparator':   { 'left': "\ue0b1", 'right': "\ue0b3" }
+            \ 'subseparator':   { 'left': "\ue0b1", 'right': "\ue0b3" },
             \ }
 
 function! LightLineReadonly()
     let fname = expand('%')
-    if fname =~ 'NERD_Tree'
+    if fname =~ 'NERD_tree'
         return ""
     elseif &filetype == "help" | "qf"
         return ""
@@ -298,7 +299,7 @@ endfunction
 
 function! LightLineModified()
     let fname = expand('%')
-    if fname =~ 'NERD_Tree'
+    if fname =~ 'NERD_tree'
         return ""
     elseif &filetype == "help" || "qf"
         return ""
@@ -319,6 +320,7 @@ function! LightLineFilename()
         return ""
     else
         return fname =~ 'NERD_tree' ?  '' :
+                    \fname =~ 'ControlP' ? '' :
                     \('' != fname ? fname_disp : '[No name]')
 endfunction
 
@@ -333,7 +335,8 @@ function! LightLineMode()
     if &filetype == "qf"
         return ""
     else
-        return fname =~ 'NERD_tree' ?  '' :
+        return fname =~ 'NERD_tree' ?  'NERDTree' :
+                    \fname =~ 'ControlP' ? 'Ctrl-P' :
                     \winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
@@ -343,8 +346,19 @@ function! LightLineLineInfo()
         return ""
     else
         return fname =~ 'NERD_tree' ?  '' :
-                    \printf("%3d:%-2d \ue0b3 %3d%%", line('.'), col('.'),
-                    \ line('.') * 100 / line('$'))
+                    \fname =~ 'ControlP' ? '' :
+                    \printf("%3d:%-2d", line('.'), col('.'))
+                    " line('.') * 100 / line('$'))
+endfunction
+
+function! LightLinePercent()
+    let fname = expand('%:t')
+    if &filetype == "qf"
+        return ""
+    else
+        return fname =~ 'NERD_tree' ?  '' :
+                    \fname =~ 'ControlP' ? '' :
+                    \printf("%3d%%", line('.') * 100 / line('$'))
 endfunction
 
 function! LightlineYcmErrors()
@@ -406,6 +420,7 @@ let g:ycm_goto_buffer_command = 'new-or-existing-tab'
 
 " Remove <Tab> from the list of keys mapped by YCM.
 let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_stop_completion = ['<Tab>']
 
 nnoremap <F5> :YcmDiags<cr><C-w>k
 nnoremap <leader>y  :YcmForceCompileAndDiagnostics<cr>
