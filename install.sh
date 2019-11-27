@@ -21,7 +21,7 @@ SHELL=$DOTFILE/shell
 
 #Install
 cp $SCRIPT_PATH/shell/* $SHELL
-cp $SCRIPT_PATH/bashrc $HOME/.bashrc
+cat $SCRIPT_PATH/bashrc >> $HOME/.bashrc
 cp $SCRIPT_PATH/vimrc $HOME/.vimrc
 cp $SCRIPT_PATH/inputrc $HOME/.inputrc
 
