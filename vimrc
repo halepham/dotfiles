@@ -22,6 +22,7 @@ Plug 'kien/ctrlp.vim'
 
 " Auto-completion | Syntax & checking"
 Plug 'ycm-core/YouCompleteMe'
+Plug 'dense-analysis/ale'
 
 if has('nvim')
     " Plugin to read or write files with sudo command'.
@@ -77,7 +78,12 @@ set number          " Display line number
 set wildmode=longest,list,full
 set wildmenu            " completion with menu
 
+" Search configuration
+set ignorecase                    " ignore case when searching
+set smartcase                     " turn on smartcase
+
 " Editor settings "
+" set showtabline=2
 set tabstop=4       " number of spaces a tab counts for
 set shiftwidth=4    " spaces for autoindents
 set softtabstop=4
@@ -201,6 +207,7 @@ let g:lasttab = 1
 nnoremap <m-[> :exe "tabn ".g:lasttab<CR>
 au TabLeave * let g:lasttab = tabpagenr()
 
+let g:python3_host_prog = '/usr/bin/python3'
 " Resize window
 map <m-Up> :resize +1<CR>
 map <m-Down> :resize -1<CR>
@@ -214,6 +221,7 @@ map <m-Right> :vertical resize +1<CR>
 nnoremap <F2> :NERDTreeToggle<CR><C-w>w
 
 " let NERDTreeMapOpenInTab='<ENTER>'
+" let g:NERDTreeWinPos = "right"
 " Set the working directory to the current file's directory
 autocmd BufEnter * lcd %:p:h
 " Show NERD tree and move cursor to current file
@@ -369,12 +377,12 @@ endfunction
 
 function! LightlineYcmErrors()
     let cnt = youcompleteme#GetErrorCount()
-    return cnt > 0 ? string(cnt) . " \ue20c" : ''
+    return cnt > 0 ? string(cnt) . "\ue20c" : ''
 endfunction
 
 function! LightlineYcmWarnings()
     let cnt = youcompleteme#GetWarningCount()
-    return cnt > 0 ? string(cnt) . " \ue240" : ''
+    return cnt > 0 ? string(cnt) . "\ue240" : ''
 endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
