@@ -201,6 +201,12 @@ let g:lasttab = 1
 nnoremap <m-[> :exe "tabn ".g:lasttab<CR>
 au TabLeave * let g:lasttab = tabpagenr()
 
+" Resize window
+map <m-Up> :resize +1<CR>
+map <m-Down> :resize -1<CR>
+map <m-Left> :vertical resize -1<CR>
+map <m-Right> :vertical resize +1<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                 NERDTree                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
