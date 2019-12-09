@@ -16,6 +16,7 @@ Plug 'scrooloose/nerdtree'
 
 " Statusline "
 Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
 
 " Ctrl + P: Find, move to a File "
 Plug 'kien/ctrlp.vim'
@@ -23,6 +24,7 @@ Plug 'kien/ctrlp.vim'
 " Auto-completion | Syntax & checking"
 Plug 'ycm-core/YouCompleteMe'
 Plug 'dense-analysis/ale'
+Plug 'Valloric/ListToggle'
 
 if has('nvim')
     " Plugin to read or write files with sudo command'.
@@ -72,6 +74,16 @@ set ruler           " show cursor position in status bar
 set cursorline      " highlights the current line
 set number          " Display line number
 
+" hide cursor line when focus in on other window
+" https://stackoverflow.com/questions/14068751/how-to-hide-cursor-line-when-focus-in-on-other-window-in-vim
+augroup CursorLine
+    au!
+    au VimEnter * setlocal cursorline
+    au WinEnter * setlocal cursorline
+    au BufWinEnter * setlocal cursorline
+    au WinLeave * setlocal nocursorline
+augroup END
+
 " When you type the first tab, it will complete as much as possible, the second
 " tab hit will provide a list, the third and subsequent tabs will cycle through
 " completion options so you can complete the file without further keys
@@ -115,6 +127,8 @@ set colorcolumn=+1
 " This limits the size of the max number of items to show in Vim's popup menu
 " (which is used by YouCompleteMe).
 set pumheight=10
+set splitbelow
+set splitright
 
 if has('unnamedplus')
   " By default, Vim will not use the system clipboard when yanking/pasting to
@@ -207,12 +221,13 @@ let g:lasttab = 1
 nnoremap <m-[> :exe "tabn ".g:lasttab<CR>
 au TabLeave * let g:lasttab = tabpagenr()
 
-let g:python3_host_prog = '/usr/bin/python3'
 " Resize window
-map <m-Up> :resize +1<CR>
-map <m-Down> :resize -1<CR>
-map <m-Left> :vertical resize -1<CR>
-map <m-Right> :vertical resize +1<CR>
+nnoremap + <C-W>+
+nnoremap - <C-W>-
+nnoremap < <C-W><
+nnoremap > <C-W>>
+
+let g:python3_host_prog = '/usr/bin/python3'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                 NERDTree                                     "
@@ -230,22 +245,6 @@ autocmd VimEnter * NERDTree | call feedkeys("\<C-w>w")
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && 
             \b:NERDTree.isTabTree()) | q | endif
 
-function g:Check2CloseVim()
-    if (winnr("$") == 2 && exists("b:NERDTree"))
-        exe 'wincmd w'
-        if &filetype == "qf"
-            q
-            if (b:NERDTree.isTabTree())
-                q
-            endif
-        else
-            exe 'wincmd p'
-        endif
-    endif
-endfunction
-
-autocmd BufEnter * call Check2CloseVim()
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                lightline                                     "
 " Currently, wombat, solarized, powerline, powerlineish,                       "
@@ -258,14 +257,14 @@ autocmd BufEnter * call Check2CloseVim()
 
 let g:rigel_lightline = 1
 let g:lightline = {
-            \ 'colorscheme': 'deus',
+            \ 'colorscheme': 'one',
             \ 'active': {
             \   'left': [
-            \             [ 'mode', 'paste' ],
-            \             [ 'readonly', 'filename', 'modified' ]
+            \             [ 'readonly', 'mode', 'paste' ],
+            \             [ 'gitbranch', 'filename', 'modified' ]
             \           ],
             \   'right':[
-            \             [ 'lineinfo', 'percent' ],
+            \             [ 'lineinfo' ],
             \             [ 'linter_warnings', 'linter_errors', 'filetype' ]
             \           ]
             \ },
@@ -285,6 +284,7 @@ let g:lightline = {
             \   'mode':      'LightLineMode',
             \   'percent':   'LightLinePercent',
             \   'lineinfo':  'LightLineLineInfo',
+            \   'gitbranch': 'LightLineGit',
             \ },
             \'component_expand': {
             \   'linter_warnings': 'LightlineYcmWarnings',
@@ -297,6 +297,8 @@ let g:lightline = {
             \ 'separator':      { 'left': "\ue0b0", 'right': "\ue0b2" },
             \ 'subseparator':   { 'left': "\ue0b1", 'right': "\ue0b3" },
             \ }
+
+nnoremap <F5> :call lightline#update()<CR>
 
 function! LightLineReadonly()
     let fname = expand('%')
@@ -360,11 +362,13 @@ function! LightLineLineInfo()
         return ""
     else
         return fname =~ 'NERD_tree' ?  '' :
-                    \fname =~ 'ControlP' ? '' :
-                    \printf("%3d:%-2d", line('.'), col('.'))
-                    " line('.') * 100 / line('$'))
+                \fname =~ 'ControlP' ? '' :
+                \printf("%3d%% \ue12f  %3d/%d \ue0a1 : %2d", 
+                \line('.') * 100 / line('$'), 
+                \line('.'), line('$'), col('.'))
 endfunction
 
+" Deprecated
 function! LightLinePercent()
     let fname = expand('%:t')
     if &filetype == "qf"
@@ -373,6 +377,11 @@ function! LightLinePercent()
         return fname =~ 'NERD_tree' ?  '' :
                     \fname =~ 'ControlP' ? '' :
                     \printf("%3d%%", line('.') * 100 / line('$'))
+endfunction
+
+function! LightLineGit()
+    let branchname = gitbranch#name()
+    return strlen(branchname) > 0 ? "\ue0a0" . branchname : ''
 endfunction
 
 function! LightlineYcmErrors()
@@ -427,20 +436,44 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 "           \ '~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
 
 let g:ycm_max_diagnostics_to_display = 0
-let g:ycm_error_symbol = '✘'
-let g:ycm_warning_symbol = '∆'
+let g:ycm_error_symbol = '▸▸'
+let g:ycm_warning_symbol = '--'
 
 let g:ycm_goto_buffer_command = 'new-or-existing-tab'
 
-" Remove <Tab> from the list of keys mapped by YCM.
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_key_list_stop_completion = ['<Tab>']
+let g:ycm_key_list_select_completion = ['<Tab>']
+let g:ycm_key_list_previous_completion = ['<S-TAB>']
+let g:ycm_key_list_stop_completion = ['<Enter>', '<UP>', '<DOWN>' ]
 
-nnoremap <F5> :YcmDiags<cr><C-w>k
+let g:lt_location_list_toggle_map = '<F9>'
+let g:lt_quickfix_list_toggle_map = '<NOP>'
+let g:lt_height = 5
+
+let g:ycm_filetype_whitelist = {
+			\ "c":1,
+			\ "cpp":1,
+			\ "objc":1,
+			\ "sh":1,
+			\ "zsh":1,
+			\ "zimbu":1,
+			\ "python":1,
+			\ }
+
+"function! s:CustomizeYcmLocationWindow()
+"  " Move the window to the top of the screen.
+"  wincmd K
+"  " Set the window height to 5.
+"  5wincmd _
+"  " Switch back to working window.
+"  wincmd p
+"endfunction
+"autocmd User YcmLocationOpened call s:CustomizeYcmLocationWindow()
+
+" nnoremap <F10> :YcmDiags<CR>:lcl<CR>
 nnoremap <leader>y  :YcmForceCompileAndDiagnostics<cr>
-nnoremap <leader>g :YcmCompleter GoTo<CR>:NERDTreeFocus<CR><C-w>w
-nnoremap <m-]> :YcmCompleter GoToDefinition<CR>:NERDTreeFocus<CR><C-w>w
-nnoremap <m-}> :YcmCompleter GoToDeclaration<CR>:NERDTreeFocus<CR><C-w>w
+nnoremap <leader>g :YcmCompleter GoTo<CR>:NERDTreeFocus<CR><C-w>p
+nnoremap <m-]> :YcmCompleter GoToDefinition<CR>:NERDTreeFocus<CR><C-w>p
+nnoremap <m-}> :YcmCompleter GoToDeclaration<CR>:NERDTreeFocus<CR><C-w>p
 
 " Using <space> at the end to make it more visible and prevent trimming
 nnoremap <f6> :YcmCompleter RefactorRename<space>
