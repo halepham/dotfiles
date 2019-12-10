@@ -257,7 +257,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
 
 let g:rigel_lightline = 1
 let g:lightline = {
-            \ 'colorscheme': 'one',
+            \ 'colorscheme': 'powerline',
             \ 'active': {
             \   'left': [
             \             [ 'readonly', 'mode', 'paste' ],
@@ -337,12 +337,14 @@ function! LightLineFilename()
     else
         return fname =~ 'NERD_tree' ?  '' :
                     \fname =~ 'ControlP' ? '' :
+                    \&filetype =~ 'vim-plug' ? '' :
                     \('' != fname ? fname_disp : '[No name]')
 endfunction
 
 function! LightLineFiletype()
     let fname = expand('%:t')
     return fname =~ 'NERD_tree' ? '' :
+        \ &filetype =~ 'vim-plug' ? '' :
         \ strlen(&filetype) ? &filetype : ''
 endfunction
 
@@ -352,6 +354,7 @@ function! LightLineMode()
         return ""
     else
         return fname =~ 'NERD_tree' ?  'NERDTree' :
+                    \&filetype =~ 'vim-plug' ? 'Vim-Plug' :
                     \fname =~ 'ControlP' ? 'Ctrl-P' :
                     \winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
@@ -363,6 +366,7 @@ function! LightLineLineInfo()
     else
         return fname =~ 'NERD_tree' ?  '' :
                 \fname =~ 'ControlP' ? '' :
+                \&filetype =~ 'vim-plug' ? '' :
                 \printf("%3d%% \ue12f  %3d/%d \ue0a1 : %2d", 
                 \line('.') * 100 / line('$'), 
                 \line('.'), line('$'), col('.'))
