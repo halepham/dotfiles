@@ -21,9 +21,13 @@ SHELL=$DOTFILE/shell
 
 #Install
 cp $SCRIPT_PATH/shell/* $SHELL
-cat $SCRIPT_PATH/bashrc >> $HOME/.bashrc
 cp $SCRIPT_PATH/vimrc $HOME/.vimrc
 cp $SCRIPT_PATH/inputrc $HOME/.inputrc
+
+if [ ! "$( cat $HOME/.bashrc | grep \"\# My dotfiles\" )" ]
+then
+    cat $SCRIPT_PATH/bashrc >> $HOME/.bashrc
+fi
 
 if [ -f $HOME/.config/nvim/init.vim ]
 then
