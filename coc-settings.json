@@ -1,0 +1,56 @@
+{
+  "suggest.maxCompleteItemCount": 20,
+  "diagnostic.infoSign": "ღ",
+  "diagnostic.hintSign": "ஐ",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.errorSign": "✖",
+  "diagnostic.enable": false,
+  "diagnostic.signOffset": 9999999,
+  "diagnostic.highlightOffset": 9999999,
+  "diagnostic.refreshOnInsertMode": true,
+  "suggest.completionItemKindLabels": {
+    "keyword": "keyword",
+    "variable": "variable",
+    "value": "value",
+    "operator": "operator",
+    "function": "function",
+    "reference": "reference",
+    "constant": "constant",
+    "method": "method",
+    "struct": "struct",
+    "class": "class",
+    "interface": "interface",
+    "text": "text",
+    "enum": "enum",
+    "enumMember": "enumMember",
+    "module": "module",
+    "color": "\ue22b",
+    "property": "property",
+    "field": "field",
+    "unit": "unit",
+    "event": "event",
+    "file": "file",
+    "folder": "folder",
+    "snippet": "snippet",
+    "typeParameter": "parameter",
+    "default": ""
+  },
+  "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "filetypes": ["c", "cpp", "objc", "objcpp"],
+      "rootPatterns": [".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "initializationOptions": {
+         "cache": {
+           "directory": "/tmp/ccls"
+         }
+       }
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    }
+  }
+}
