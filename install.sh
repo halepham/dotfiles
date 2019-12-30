@@ -14,6 +14,8 @@ SHELL=$DOTFILE/shell
 
 [ -f $HOME/.config/nvim/init.vim ] && \
     cp $HOME/.config/nvim/init.vim "$BKP/init_vim_$(date '+%Y%m%d%H%M%S')"
+[ -f $HOME/.config/nvim/coc-settings.json ] && \
+    cp $HOME/.config/nvim/coc-settings.json "$BKP/coc-settings_$(date '+%Y%m%d%H%M%S')"
 
 [ -f $HOME/.bashrc ] && cp $HOME/.bashrc "$BKP/bashrc_$(date '+%Y%m%d%H%M%S')"
 
@@ -31,9 +33,8 @@ fi
 
 if [ -f $HOME/.config/nvim/init.vim ]
 then
-    cp $SCRIPT_PATH/vimrc $HOME/.config/nvim/init.vim
+    cp $SCRIPT_PATH/{vimrc, coc-settings.json} $HOME/.config/nvim
 else
     mkdir -p $HOME/.config/nvim
-    cp $SCRIPT_PATH/vimrc $HOME/.config/nvim/init.vim
+    cp $SCRIPT_PATH/{vimrc, coc-settings.json} $HOME/.config/nvim
 fi
-
