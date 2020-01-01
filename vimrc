@@ -7,6 +7,9 @@ call plug#begin('~/.vim/bundle')
 
 " Theme "
 Plug 'gmoe/vim-espresso'
+Plug 'nanotech/jellybeans.vim'
+Plug 'ajmwagar/vim-deus'
+Plug 'dracula/vim'
 
 " Show indent line "
 Plug 'Yggdroot/indentLine'
@@ -67,7 +70,10 @@ syntax enable
 set nocompatible
 set t_Co=256
 set background=dark
-colorscheme espresso
+" colorscheme espresso
+" colorscheme jellybeans
+colorscheme deus
+" colorscheme dracula
 
 " Display settings "
 set scrolloff=4     " 4 lines above/below cursor when scrolling
@@ -128,6 +134,9 @@ set updatetime=300
 
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
+"
+" always show signcolumns
+set signcolumn=yes
 
 " toggles vim's paste mode; when we want to paste something into vim from a
 " different application, turning on paste mode prevents the insertion of extra
@@ -263,6 +272,8 @@ nnoremap <F2> :NERDTreeToggle<CR><C-w>w
 
 " let NERDTreeMapOpenInTab='<ENTER>'
 " let g:NERDTreeWinPos = "right"
+let NERDTreeShowHidden=1
+let NERDTreeIgnore=['\~$', '\.swp', '\.git', 'node_modules', 'venv']
 " Set the working directory to the current file's directory
 autocmd BufEnter * lcd %:p:h
 " Show NERD tree and move cursor to current file
