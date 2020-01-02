@@ -10,6 +10,10 @@ Plug 'gmoe/vim-espresso'
 Plug 'nanotech/jellybeans.vim'
 Plug 'ajmwagar/vim-deus'
 Plug 'dracula/vim'
+Plug 'rakr/vim-one'
+Plug 'BarretRen/vim-colorscheme'
+Plug 'sainnhe/edge'
+Plug 'NLKNguyen/papercolor-theme'
 
 " Show indent line "
 Plug 'Yggdroot/indentLine'
@@ -69,11 +73,26 @@ set encoding=utf-8
 syntax enable
 set nocompatible
 set t_Co=256
+" set background=light
 set background=dark
+
 " colorscheme espresso
 " colorscheme jellybeans
-colorscheme deus
+" colorscheme deus
 " colorscheme dracula
+" let g:one_allow_italics = 1
+" colorscheme one
+" There are some themes at line 116 due to colorscheme not loading
+" https://www.reddit.com/r/neovim/comments/8lt2ot/colorscheme_not_loading_from_vimrc/dzk1l0e/
+
+if (empty($TMUX))
+  if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
 
 " Display settings "
 set scrolloff=4     " 4 lines above/below cursor when scrolling
@@ -93,6 +112,11 @@ augroup CursorLine
     au BufWinEnter * setlocal cursorline
     au WinLeave * setlocal nocursorline
 augroup END
+
+let g:edge_style = 'neon'
+let g:edge_disable_italic_comment = 0
+colorscheme edge
+" colorscheme PaperColor
 
 " When you type the first tab, it will complete as much as possible, the second
 " tab hit will provide a list, the third and subsequent tabs will cycle through
