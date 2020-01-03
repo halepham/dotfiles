@@ -18,6 +18,9 @@ Plug 'NLKNguyen/papercolor-theme'
 " Show indent line "
 Plug 'Yggdroot/indentLine'
 
+" displays tags in a window
+Plug 'majutsushi/tagbar'
+
 " File Management "
 Plug 'scrooloose/nerdtree'
 
@@ -198,6 +201,9 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
 
 " Indent Line configs indentLine_char_list = ['|', '¦', '┆', '┊', '', '']
 let g:indentLine_char_list = ['']
+
+" Tagbar configs
+nmap <F3> :TagbarToggle<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                              custom mappings                                 "
