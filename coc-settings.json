@@ -1,10 +1,11 @@
 {
   "suggest.maxCompleteItemCount": 20,
+  "diagnostic.displayByAle": false,
   "diagnostic.infoSign": "ღ",
   "diagnostic.hintSign": "ஐ",
-  "diagnostic.warningSign": "⚠",
-  "diagnostic.errorSign": "✖",
-  "diagnostic.enable": false,
+  "diagnostic.warningSign": "- ",
+  "diagnostic.errorSign": "▸ ",
+  "diagnostic.enable": true,
   "diagnostic.signOffset": 9999999,
   "diagnostic.highlightOffset": 9999999,
   "diagnostic.refreshOnInsertMode": true,
@@ -24,7 +25,7 @@
     "enum": "enum",
     "enumMember": "enumMember",
     "module": "module",
-    "color": "\ue22b",
+    "color": "color",
     "property": "property",
     "field": "field",
     "unit": "unit",
@@ -40,6 +41,7 @@
       "command": "ccls",
       "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
       "rootPatterns": [".ccls-root", "compile_commands.json"],
+      "trace.server": "verbose",
       "initializationOptions": {
          "cache": {
            "directory": ".ccls-cache"
@@ -50,6 +52,7 @@
       "command": "bash-language-server",
       "args": ["start"],
       "filetypes": ["sh"],
+      "trace.server": "verbose",
       "ignoredRootPaths": ["~"]
     }
   }
