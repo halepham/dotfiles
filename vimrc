@@ -31,6 +31,9 @@ Plug 'itchyny/vim-gitbranch'
 " Ctrl + P: Find, move to a File "
 Plug 'kien/ctrlp.vim'
 
+" Automatically append closing characters
+Plug 'jiangmiao/auto-pairs'
+
 " Language Server Protocol "
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -85,7 +88,7 @@ set background=dark
 " colorscheme dracula
 " let g:one_allow_italics = 1
 " colorscheme one
-" There are some themes at line 116 due to colorscheme not loading
+" There are some themes at line 122 due to colorscheme not loading
 " https://www.reddit.com/r/neovim/comments/8lt2ot/colorscheme_not_loading_from_vimrc/dzk1l0e/
 
 if (empty($TMUX))
@@ -118,6 +121,7 @@ augroup END
 
 let g:edge_style = 'neon'
 let g:edge_disable_italic_comment = 0
+let g:edge_lightline_disable_bold = 1
 colorscheme edge
 " colorscheme PaperColor
 
@@ -198,12 +202,6 @@ endif
 " When opening a file, go to the last position we were on
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
             \ exe "normal! g`\"" | endif
-
-" Indent Line configs indentLine_char_list = ['|', '¦', '┆', '┊', '', '']
-let g:indentLine_char_list = ['']
-
-" Tagbar configs
-nmap <F3> :TagbarToggle<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                              custom mappings                                 "
@@ -292,7 +290,25 @@ nnoremap - <C-W>-
 nnoremap < <C-W><
 nnoremap > <C-W>>
 
-let g:python3_host_prog = '/usr/bin/python3'
+" let g:python3_host_prog = '/usr/bin/python3'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Indent Line                                    "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:indentLine_color_term = 100
+" let g:indentLine_bgcolor_term = 330
+let g:indentLine_color_gui = '#4c4c4c'
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
+let g:indentLine_leadingSpaceChar = '.'
+let g:indentLine_leadingSpaceEnabled = 1
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊', '']
+let g:indentLine_char_list = ['┊']
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  Tagbar                                      "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <F3> :TagbarToggle<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                 NERDTree                                     "
@@ -303,7 +319,8 @@ nnoremap <F2> :NERDTreeToggle<CR><C-w>w
 " let NERDTreeMapOpenInTab='<ENTER>'
 " let g:NERDTreeWinPos = "right"
 let NERDTreeShowHidden=1
-let NERDTreeIgnore=['\~$', '\.swp', '\.git', 'node_modules', 'venv']
+let NERDTreeIgnore=['\~$', '\.swp', '\.git',
+                \   'node_modules', 'venv', '.ccls-cache']
 " Set the working directory to the current file's directory
 autocmd BufEnter * lcd %:p:h
 " Show NERD tree and move cursor to current file
@@ -322,9 +339,8 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
 " srcery_drk, ayu_mirage and 16color are available.                            "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:rigel_lightline = 1
 let g:lightline = {
-            \ 'colorscheme': 'deus',
+            \ 'colorscheme': 'edge',
             \ 'active': {
             \   'left': [
             \             [ 'readonly', 'mode', 'paste' ],
@@ -377,7 +393,7 @@ function! LightLineReadonly()
     let fname = expand('%')
     if fname =~ 'NERD_tree'
         return ""
-    elseif &filetype == "help" | "qf"
+    elseif &filetype == "help" || "qf" || "tagbar"
         return ""
     elseif &readonly
         return "\ue0a2"
@@ -390,7 +406,7 @@ function! LightLineModified()
     let fname = expand('%')
     if fname =~ 'NERD_tree'
         return ""
-    elseif &filetype == "help" || "qf"
+    elseif &filetype == "help" || "qf" || "tagbar"
         return ""
     elseif &modified
         return "+"
@@ -411,6 +427,7 @@ function! LightLineFilename()
         return fname =~ 'NERD_tree' ?  '' :
                     \fname =~ 'ControlP' ? '' :
                     \&filetype =~ 'vim-plug' ? '' :
+                    \&filetype =~ 'tagbar' ? '' :
                     \('' != fname ? fname_disp : '[No name]')
 endfunction
 
@@ -418,6 +435,7 @@ function! LightLineFiletype()
     let fname = expand('%:t')
     return fname =~ 'NERD_tree' ? '' :
         \ &filetype =~ 'vim-plug' ? '' :
+        \ &filetype =~ 'tagbar' ? '' :
         \ strlen(&filetype) ? &filetype : ''
 endfunction
 
@@ -428,6 +446,7 @@ function! LightLineMode()
     else
         return fname =~ 'NERD_tree' ?  'NERDTree' :
                     \&filetype =~ 'vim-plug' ? 'Vim-Plug' :
+                    \&filetype =~ 'tagbar' ? 'Tagbar' :
                     \fname =~ 'ControlP' ? 'Ctrl-P' :
                     \winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
@@ -440,6 +459,7 @@ function! LightLineLineInfo()
         return fname =~ 'NERD_tree' ?  '' :
                 \fname =~ 'ControlP' ? '' :
                 \&filetype =~ 'vim-plug' ? '' :
+                \&filetype =~ 'tagbar' ? '' :
                 \printf("%3d%% \ue12f  %3d/%d \ue0a1 : %2d",
                 \line('.') * 100 / line('$'),
                 \line('.'), line('$'), col('.'))
@@ -454,6 +474,7 @@ function! LightLineGit()
         return fname =~ 'NERD_tree' ?  '' :
                 \fname =~ 'ControlP' ? '' :
                 \&filetype =~ 'vim-plug' ? '' :
+                \&filetype =~ 'tagbar' ? '' :
                 \strlen(branchname) > 0 ? "\ue0a0" . branchname : ''
 endfunction
 
@@ -473,8 +494,12 @@ let g:ale_sign_warning = '--'
 
 " fixer configurations
 let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\}
+            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+            \}
+
+let g:ale_linters = {
+            \   'c': ['ccls'],
+            \}
 
 let g:ale_echo_msg_error_str = 'Error'
 let g:ale_echo_msg_warning_str = 'Warning'
@@ -487,25 +512,26 @@ let g:lightline#ale#indicator_ok = ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  ctrlp                                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" " let g:ctrlp_map = '<leader>t'
-" " nnoremap <leader>n :CtrlPMRU<cr>
-" " nnoremap <leader>' :CtrlPClearCache<cr>
-"
-" " Use Vim's cwd
-" let g:ctrlp_working_path_mode = 0
-" let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30'
-"
-" " Faster indexing of files; requires having ag (AKA the_silver_searcher)
-" " installed.
-" let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-"       \ --ignore .git
-"       \ --ignore .svn
-"       \ --ignore .hg
-"       \ --ignore .DS_Store
-"       \ --ignore "**/*.pyc"
-"       \ --ignore BoostParts
-"       \ -g ""'
+
+" let g:ctrlp_map = '<leader>t'
+" nnoremap <leader>n :CtrlPMRU<cr>
+" nnoremap <leader>' :CtrlPClearCache<cr>
+
+" Use Vim's cwd
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30'
+
+" Faster indexing of files; requires having ag (AKA the_silver_searcher)
+" installed.
+let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+      \ --ignore .git
+      \ --ignore .ccls-cache
+      \ --ignore .svn
+      \ --ignore .hg
+      \ --ignore .DS_Store
+      \ --ignore "**/*.pyc"
+      \ --ignore BoostParts
+      \ -g ""'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                YouCompleteMe                                 "
@@ -582,6 +608,14 @@ let g:lightline#ale#indicator_ok = ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  COC.nvim                                    "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" COC init
+let g:coc_global_extensions = [
+            \   'coc-snippets',
+            \   'coc-ccls',
+            \   'coc-sh',
+            \   'coc-python',
+            \   ]
+
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -612,8 +646,8 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Use ? to show documentation in preview window
+nnoremap <silent> ? :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -641,37 +675,37 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>af  <Plug>(coc-fix-current)
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
-" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <C-d> <Plug>(coc-range-select)
-xmap <silent> <C-d> <Plug>(coc-range-select)
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
+" " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+" xmap <leader>a  <Plug>(coc-codeaction-selected)
+" nmap <leader>a  <Plug>(coc-codeaction-selected)
+"
+" " Remap for do codeAction of current line
+" nmap <leader>ac  <Plug>(coc-codeaction)
+" " Fix autofix problem of current line
+" nmap <leader>af  <Plug>(coc-fix-current)
+"
+" " Create mappings for function text object, requires document symbols feature of languageserver.
+" xmap if <Plug>(coc-funcobj-i)
+" xmap af <Plug>(coc-funcobj-a)
+" omap if <Plug>(coc-funcobj-i)
+" omap af <Plug>(coc-funcobj-a)
+"
+" " Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+" nmap <silent> <C-d> <Plug>(coc-range-select)
+" xmap <silent> <C-d> <Plug>(coc-range-select)
+"
+" " Use `:Format` to format current buffer
+" command! -nargs=0 Format :call CocAction('format')
+"
+" " Use `:Fold` to fold current buffer
+" command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+"
+" " use `:OR` for organize import of current buffer
+" command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+"
+" " Add status line support, for integration with other plugin, checkout `:h coc-status`
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+"
 " " Using CocList
 " " Show all diagnostics
 " nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
