@@ -513,10 +513,6 @@ let g:lightline#ale#indicator_ok = ""
 "                                  ctrlp                                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" let g:ctrlp_map = '<leader>t'
-" nnoremap <leader>n :CtrlPMRU<cr>
-" nnoremap <leader>' :CtrlPClearCache<cr>
-
 " Use Vim's cwd
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30'
@@ -532,78 +528,6 @@ let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
       \ --ignore "**/*.pyc"
       \ --ignore BoostParts
       \ -g ""'
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                YouCompleteMe                                 "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" let g:ycm_use_clangd = 1
-" let g:ycm_autoclose_preview_window_after_completion = 1
-" let g:ycm_min_num_of_chars_for_completion = 3
-" let g:ycm_min_num_identifier_candidate_chars = 3
-"
-" " Also see the 'pumheight' vim option!
-" let g:ycm_max_num_identifier_candidates = 10
-" let g:ycm_clangd_uses_ycmd_caching = 1
-" let g:ycm_always_populate_location_list = 1
-" let g:ycm_show_diagnostics_ui = 1
-"
-" let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-" " let g:ycm_global_ycm_extra_conf =
-" "           \ '~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
-"
-" let g:ycm_max_diagnostics_to_display = 0
-" let g:ycm_error_symbol = '▸▸'
-" let g:ycm_warning_symbol = '--'
-"
-" let g:ycm_goto_buffer_command = 'new-or-existing-tab'
-"
-" let g:ycm_key_list_select_completion = ['<Tab>']
-" let g:ycm_key_list_previous_completion = ['<S-TAB>']
-" let g:ycm_key_list_stop_completion = ['<Enter>', '<UP>', '<DOWN>' ]
-"
-" let g:lt_location_list_toggle_map = '<F9>'
-" let g:lt_quickfix_list_toggle_map = '<NOP>'
-" let g:lt_height = 5
-"
-" let g:ycm_filetype_whitelist = {
-" 			\ "c":1,
-" 			\ "cpp":1,
-" 			\ "objc":1,
-" 			\ "sh":1,
-" 			\ "zsh":1,
-" 			\ "zimbu":1,
-" 			\ "python":1,
-" 			\ }
-"
-" "function! s:CustomizeYcmLocationWindow()
-" "  " Move the window to the top of the screen.
-" "  wincmd K
-" "  " Set the window height to 5.
-" "  5wincmd _
-" "  " Switch back to working window.
-" "  wincmd p
-" "endfunction
-" "autocmd User YcmLocationOpened call s:CustomizeYcmLocationWindow()
-"
-" " nnoremap <F10> :YcmDiags<CR>:lcl<CR>
-" nnoremap <leader>y  :YcmForceCompileAndDiagnostics<cr>
-" nnoremap <leader>g :YcmCompleter GoTo<CR>:NERDTreeFocus<CR><C-w>p
-" nnoremap <m-]> :YcmCompleter GoToDefinition<CR>:NERDTreeFocus<CR><C-w>p
-" nnoremap <m-}> :YcmCompleter GoToDeclaration<CR>:NERDTreeFocus<CR><C-w>p
-"
-" " Using <space> at the end to make it more visible and prevent trimming
-" nnoremap <f6> :YcmCompleter RefactorRename<space>
-"
-" " functions for Lightline
-" function! LightlineYcmErrors()
-"     let cnt = youcompleteme#GetErrorCount()
-"     return cnt > 0 ? string(cnt) . "\ue20c" : ''
-" endfunction
-"
-" function! LightlineYcmWarnings()
-"     let cnt = youcompleteme#GetWarningCount()
-"     return cnt > 0 ? string(cnt) . "\ue240" : ''
-" endfunction
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  COC.nvim                                    "
@@ -674,55 +598,6 @@ augroup mygroup
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
-
-" " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-" xmap <leader>a  <Plug>(coc-codeaction-selected)
-" nmap <leader>a  <Plug>(coc-codeaction-selected)
-"
-" " Remap for do codeAction of current line
-" nmap <leader>ac  <Plug>(coc-codeaction)
-" " Fix autofix problem of current line
-" nmap <leader>af  <Plug>(coc-fix-current)
-"
-" " Create mappings for function text object, requires document symbols feature of languageserver.
-" xmap if <Plug>(coc-funcobj-i)
-" xmap af <Plug>(coc-funcobj-a)
-" omap if <Plug>(coc-funcobj-i)
-" omap af <Plug>(coc-funcobj-a)
-"
-" " Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-" nmap <silent> <C-d> <Plug>(coc-range-select)
-" xmap <silent> <C-d> <Plug>(coc-range-select)
-"
-" " Use `:Format` to format current buffer
-" command! -nargs=0 Format :call CocAction('format')
-"
-" " Use `:Fold` to fold current buffer
-" command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-"
-" " use `:OR` for organize import of current buffer
-" command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-"
-" " Add status line support, for integration with other plugin, checkout `:h coc-status`
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-"
-" " Using CocList
-" " Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" " Manage extensions
-" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" " Show commands
-" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" " Find symbol of current document
-" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" " Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" " Do default action for next item.
-" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" " Do default action for previous item.
-" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" " Resume latest coc list
-" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                End of file                                   "
