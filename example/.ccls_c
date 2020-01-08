@@ -1,7 +1,5 @@
-#
-
-%c %cpp --std=C99
-%h %hpp --std=C99
+%c --std=C99
+%h --std=C99
 
 # include dir
 -Iinc
