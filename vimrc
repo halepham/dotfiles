@@ -14,6 +14,9 @@ Plug 'rakr/vim-one'
 Plug 'BarretRen/vim-colorscheme'
 Plug 'sainnhe/edge'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'tyrannicaltoucan/vim-quantum'
+Plug 'sainnhe/gruvbox-material'
+Plug 'ayu-theme/ayu-vim'
 
 " Show indent line "
 Plug 'Yggdroot/indentLine'
@@ -82,15 +85,6 @@ set t_Co=256
 " set background=light
 set background=dark
 
-" colorscheme espresso
-" colorscheme jellybeans
-" colorscheme deus
-" colorscheme dracula
-" let g:one_allow_italics = 1
-" colorscheme one
-" There are some themes at line 122 due to colorscheme not loading
-" https://www.reddit.com/r/neovim/comments/8lt2ot/colorscheme_not_loading_from_vimrc/dzk1l0e/
-
 if (empty($TMUX))
   if (has("nvim"))
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -99,6 +93,50 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
+
+" hide cursor line when focus in on other window
+" https://stackoverflow.com/questions/14068751/how-to-hide-cursor-line-when-focus-in-on-other-window-in-vim
+" Set colorscheme after VimEnter
+" https://www.reddit.com/r/neovim/comments/8lt2ot/colorscheme_not_loading_from_vimrc/dzk1l0e/
+augroup CursorLine
+    au!
+    au VimEnter     * setlocal cursorline
+    au WinEnter     * setlocal cursorline
+    au BufWinEnter  * setlocal cursorline
+    au WinLeave     * setlocal nocursorline
+augroup END
+
+" colorscheme espresso
+"""""""""""""""""""""""""""""""""""""""
+" colorscheme jellybeans
+"""""""""""""""""""""""""""""""""""""""
+
+" colorscheme deus
+"""""""""""""""""""""""""""""""""""""""
+" colorscheme dracula
+"""""""""""""""""""""""""""""""""""""""
+" let g:one_allow_italics = 1
+" colorscheme one
+"""""""""""""""""""""""""""""""""""""""
+let g:edge_style = 'neon'
+let g:edge_disable_italic_comment = 0
+let g:edge_lightline_disable_bold = 1
+colorscheme edge
+"""""""""""""""""""""""""""""""""""""""
+" colorscheme PaperColor
+"""""""""""""""""""""""""""""""""""""""
+" let g:quantum_black=1
+" let g:quantum_italics=1
+" colorscheme quantum
+"""""""""""""""""""""""""""""""""""""""
+" " available values: 'hard', 'medium'(default), 'soft'
+" let g:gruvbox_material_background = 'soft'
+" colorscheme gruvbox-material
+"""""""""""""""""""""""""""""""""""""""
+" let ayucolor="light"  " for light version of theme
+" let ayucolor="mirage" " for mirage version of theme
+" let ayucolor="dark"   " for dark version of theme
+" colorscheme ayu
 
 " Display settings "
 set scrolloff=4     " 4 lines above/below cursor when scrolling
@@ -109,22 +147,6 @@ set ruler           " show cursor position in status bar
 set cursorline      " highlights the current line
 set number          " Display line number
 
-" hide cursor line when focus in on other window
-" https://stackoverflow.com/questions/14068751/how-to-hide-cursor-line-when-focus-in-on-other-window-in-vim
-augroup CursorLine
-    au!
-    au VimEnter * setlocal cursorline
-    au WinEnter * setlocal cursorline
-    au BufWinEnter * setlocal cursorline
-    au WinLeave * setlocal nocursorline
-augroup END
-
-let g:edge_style = 'neon'
-let g:edge_disable_italic_comment = 0
-let g:edge_lightline_disable_bold = 1
-colorscheme edge
-" colorscheme PaperColor
-
 " When you type the first tab, it will complete as much as possible, the second
 " tab hit will provide a list, the third and subsequent tabs will cycle through
 " completion options so you can complete the file without further keys
@@ -132,8 +154,8 @@ set wildmode=longest,list,full
 set wildmenu            " completion with menu
 
 " Search configuration
-set ignorecase                    " ignore case when searching
-set smartcase                     " turn on smartcase
+set ignorecase      " ignore case when searching
+set smartcase       " turn on smartcase
 
 " Editor settings "
 " set showtabline=2
@@ -300,10 +322,12 @@ nnoremap > <C-W>>
 let g:indentLine_color_gui = '#4c4c4c'
 let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
+let g:indentLine_concealcursor=""
 let g:indentLine_leadingSpaceChar = '.'
 let g:indentLine_leadingSpaceEnabled = 1
+let g:indentLine_showFirstIndentLevel = 1
 " let g:indentLine_char_list = ['|', '¦', '┆', '┊', '']
-let g:indentLine_char_list = ['┊']
+let g:indentLine_char_list = ['┆']
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  Tagbar                                      "
@@ -331,12 +355,12 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                lightline                                     "
-" Currently, wombat, solarized, powerline, powerlineish,                       "
-" jellybeans, molokai, seoul256, darcula, selenized_dark,                      "
-" Tomorrow, Tomorrow_Night, Tomorrow_Night_Blue,                               "
-" Tomorrow_Night_Bright, Tomorrow_Night_Eighties, PaperColor,                  "
-" landscape, one, materia, material, OldHope, nord, deus,                      "
-" srcery_drk, ayu_mirage and 16color are available.                            "
+" colorscheme: wombat, solarized, powerline, powerlineish,                     "
+"              jellybeans, molokai, seoul256, darcula, selenized_dark,         "
+"              Tomorrow, Tomorrow_Night, Tomorrow_Night_Blue, gruvbox-material,"
+"              Tomorrow_Night_Bright, Tomorrow_Night_Eighties, PaperColor,     "
+"              landscape, one, materia, material, OldHope, nord, deus,         "
+"              srcery_drk, ayu_mirage, 16color, edge, espresso, quantum        "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:lightline = {
@@ -429,6 +453,7 @@ function! LightLineFilename()
                     \&filetype =~ 'vim-plug' ? '' :
                     \&filetype =~ 'tagbar' ? '' :
                     \('' != fname ? fname_disp : '[No name]')
+    endif
 endfunction
 
 function! LightLineFiletype()
@@ -449,6 +474,7 @@ function! LightLineMode()
                     \&filetype =~ 'tagbar' ? 'Tagbar' :
                     \fname =~ 'ControlP' ? 'Ctrl-P' :
                     \winwidth(0) > 60 ? lightline#mode() : ''
+    endif
 endfunction
 
 function! LightLineLineInfo()
@@ -463,6 +489,7 @@ function! LightLineLineInfo()
                 \printf("%3d%% \ue12f  %3d/%d \ue0a1 : %2d",
                 \line('.') * 100 / line('$'),
                 \line('.'), line('$'), col('.'))
+    endif
 endfunction
 
 function! LightLineGit()
@@ -476,6 +503,7 @@ function! LightLineGit()
                 \&filetype =~ 'vim-plug' ? '' :
                 \&filetype =~ 'tagbar' ? '' :
                 \strlen(branchname) > 0 ? "\ue0a0" . branchname : ''
+    endif
 endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -484,7 +512,7 @@ endfunction
 " fix files on save
 let g:ale_fix_on_save = 1
 
-" lint after 1000ms after changes are made both on insert mode and normal mode
+" lint after 500ms after changes are made both on insert mode and normal mode
 let g:ale_lint_on_text_changed = 'always'
 let g:ale_lint_delay = 500
 
@@ -499,6 +527,9 @@ let g:ale_fixers = {
 
 let g:ale_linters = {
             \   'c': ['ccls'],
+            \   'cpp': ['ccls'],
+            \   'vim': ['vint'],
+            \   'bash': ['language-server']
             \}
 
 let g:ale_echo_msg_error_str = 'Error'
@@ -537,7 +568,7 @@ let g:coc_global_extensions = [
             \   'coc-snippets',
             \   'coc-ccls',
             \   'coc-sh',
-            \   'coc-python',
+            \   'coc-vimlsp',
             \   ]
 
 " Use tab for trigger completion with characters ahead and navigate.
@@ -583,6 +614,7 @@ endfunction
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHoldI * silent call CocActionAsync('showSignatureHelp')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -594,10 +626,12 @@ nmap <leader>f  <Plug>(coc-format-selected)
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  autocmd FileType typescript,json,c,cpp,python setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
+
+autocmd CursorMovedI * if &previewwindow != 1 | pclose | endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                End of file                                   "

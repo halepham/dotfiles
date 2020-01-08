@@ -1,6 +1,6 @@
 {
   "suggest.maxCompleteItemCount": 20,
-  "diagnostic.displayByAle": false,
+  "diagnostic.displayByAle": true,
   "diagnostic.infoSign": "ღ",
   "diagnostic.hintSign": "ஐ",
   "diagnostic.warningSign": "- ",
@@ -9,6 +9,11 @@
   "diagnostic.signOffset": 9999999,
   "diagnostic.highlightOffset": 9999999,
   "diagnostic.refreshOnInsertMode": true,
+  "suggest.enablePreview": true,
+  "suggest.minTriggerInputLength": 2,
+  "suggest.snippetIndicator": "[+] ",
+  "suggest.timeout": 1000,
+  "suggest.removeDuplicateItems": true,
   "suggest.completionItemKindLabels": {
     "keyword": "keyword",
     "variable": "variable",
@@ -40,12 +45,13 @@
     "ccls": {
       "command": "ccls",
       "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls-root", "compile_commands.json"],
+      "rootPatterns": [".ccls-root", "compile_commands.json", ".git/", ".ccls"],
       "trace.server": "verbose",
       "initializationOptions": {
          "cache": {
-           "directory": ".ccls-cache"
-         }
+           "directory": "/tmp/.ccls-cache"
+         },
+         "compilationDatabaseDirectory": "./build"
        }
     },
     "bash": {
