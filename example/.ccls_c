@@ -1,0 +1,10 @@
+#
+
+%c %cpp --std=C99
+%h %hpp --std=C99
+
+# include dir
+-Iinc
+-IInc
+-Iinclude
+-IInclude

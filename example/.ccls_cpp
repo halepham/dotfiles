@@ -1,0 +1,3 @@
+%cpp %h -stdlib=libc++
+%h -xc++
+-Wall
