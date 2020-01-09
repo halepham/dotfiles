@@ -110,7 +110,6 @@ augroup END
 """""""""""""""""""""""""""""""""""""""
 " colorscheme jellybeans
 """""""""""""""""""""""""""""""""""""""
-
 " colorscheme deus
 """""""""""""""""""""""""""""""""""""""
 " colorscheme dracula
@@ -342,6 +341,8 @@ nnoremap <F2> :NERDTreeToggle<CR><C-w>w
 
 " let NERDTreeMapOpenInTab='<ENTER>'
 " let g:NERDTreeWinPos = "right"
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 let NERDTreeShowHidden=1
 let NERDTreeIgnore=['\~$', '\.swp', '\.git',
                 \   'node_modules', 'venv', '.ccls-cache']
