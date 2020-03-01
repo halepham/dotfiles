@@ -25,7 +25,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'majutsushi/tagbar'
 
 " File Management "
-Plug 'scrooloose/nerdtree'
+Plug 'mcchrish/nnn.vim'
 
 " Statusline "
 Plug 'itchyny/lightline.vim'
@@ -39,12 +39,6 @@ Plug 'jiangmiao/auto-pairs'
 
 " Language Server Protocol "
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" Auto-completion | Syntax & checking "
-" Plug 'ycm-core/YouCompleteMe'
-" Plug 'Valloric/ListToggle'
-Plug 'dense-analysis/ale'
-Plug 'maximbaz/lightline-ale'
 
 if has('nvim')
     " Plugin to read or write files with sudo command'.
@@ -177,6 +171,9 @@ if has('mouse')
     set mousemodel=popup_setpos " right-click on selection should show up a menu
 endif
 
+" Give more space for displaying messages.
+set cmdheight=2
+
 " [COC issues] Some servers have issues with backup files, see #649
 set nobackup
 set nowritebackup
@@ -254,16 +251,16 @@ nnoremap <silent> zj o<Esc>k
 nnoremap <silent> zk O<Esc>j
 
 " Move cursor by display lines when wrapping
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
+nnoremap j      gj
+nnoremap k      gk
+vnoremap j      gj
+vnoremap k      gk
 nnoremap <Down> gj
-nnoremap <Up> gk
+nnoremap <Up>   gk
 vnoremap <Down> gj
-vnoremap <Up> gk
+vnoremap <Up>   gk
 inoremap <Down> <C-o>gj
-inoremap <Up> <C-o>gk
+inoremap <Up>   <C-o>gk
 
 " for faster scrolling
 noremap <c-j> 15gj
@@ -289,17 +286,17 @@ vnoremap < <gv
 vnoremap > >gv
 
 " TABs to switch files
-map <leader>t :tabnext<CR>
-map <leader>0 :tablast<CR>
-map <leader>1 1gt
-map <leader>2 2gt
-map <leader>3 3gt
-map <leader>4 4gt
-map <leader>5 5gt
-map <leader>6 6gt
-map <leader>7 7gt
-map <leader>8 8gt
-map <leader>9 9gt
+nmap <leader>t :tabnext<CR>
+nmap <leader>0 :tablast<CR>
+nmap <leader>1 1gt
+nmap <leader>2 2gt
+nmap <leader>3 3gt
+nmap <leader>4 4gt
+nmap <leader>5 5gt
+nmap <leader>6 6gt
+nmap <leader>7 7gt
+nmap <leader>8 8gt
+nmap <leader>9 9gt
 " Let 'Alt+[' toggle between this and the last accessed tab
 let g:lasttab = 1
 nnoremap <m-[> :exe "tabn ".g:lasttab<CR>
@@ -311,11 +308,13 @@ nnoremap - <C-W>-
 nnoremap < <C-W><
 nnoremap > <C-W>>
 
-" let g:python3_host_prog = '/usr/bin/python3'
+" No highlight
+map <F4> :noh<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Indent Line                                    "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " let g:indentLine_color_term = 100
 " let g:indentLine_bgcolor_term = 330
 let g:indentLine_color_gui = '#4c4c4c'
@@ -331,28 +330,59 @@ let g:indentLine_char_list = ['┆']
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  Tagbar                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 nmap <F3> :TagbarToggle<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 NERDTree                                     "
+"                                  nnn.vim                                     "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Disable default mappings
+let g:nnn#set_default_mappings = 0
+
+" Then set your own
+nnoremap <silent> <F2> :NnnPicker '%:p:h'<CR>
+
+" Opens the nnn window in a split
+let g:nnn#layout = { 'left': '~20%' } " or right, up, down
+
+" " Floating window (neovim)
+" function! s:layout()
+"   let buf = nvim_create_buf(v:false, v:true)
+"
+"   let height = &lines - (float2nr(&lines / 3))
+"   let width = float2nr(&columns - (&columns * 2 / 3))
+"
+"   let opts = {
+"         \ 'relative': 'editor',
+"         \ 'row': 2,
+"         \ 'col': 8,
+"         \ 'width': width,
+"         \ 'height': height
+"         \ }
+"
+"   call nvim_open_win(buf, v:true, opts)
+" endfunction
+" let g:nnn#layout = 'call ' . string(function('<SID>layout')) . '()'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  ctrlp                                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <F2> :NERDTreeToggle<CR><C-w>w
+" Use Vim's cwd
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30'
 
-" let NERDTreeMapOpenInTab='<ENTER>'
-" let g:NERDTreeWinPos = "right"
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-let NERDTreeShowHidden=1
-let NERDTreeIgnore=['\~$', '\.swp', '\.git',
-                \   'node_modules', 'venv', '.ccls-cache']
-" Set the working directory to the current file's directory
-autocmd BufEnter * lcd %:p:h
-" Show NERD tree and move cursor to current file
-autocmd VimEnter * NERDTree | call feedkeys("\<C-w>w")
-" Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-            \b:NERDTree.isTabTree()) | q | endif
+" Faster indexing of files; requires having ag (AKA the_silver_searcher)
+" installed.
+let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+      \ --ignore .git
+      \ --ignore .ccls-cache
+      \ --ignore .svn
+      \ --ignore .hg
+      \ --ignore .DS_Store
+      \ --ignore "**/*.pyc"
+      \ --ignore BoostParts
+      \ -g ""'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                lightline                                     "
@@ -373,8 +403,8 @@ let g:lightline = {
             \           ],
             \   'right':[
             \             [ 'lineinfo' ],
-            \             [ 'linter_errors', 'linter_warnings',
-            \               'filetype', 'linter_ok' ]
+            \             [ 'cocerror', 'cocwarn',
+            \               'filetype', 'cocok' ]
             \           ]
             \ },
             \ 'inactive': {
@@ -396,21 +426,17 @@ let g:lightline = {
             \   'gitbranch': 'LightLineGit',
             \ },
             \'component_expand': {
-            \  'linter_checking': 'lightline#ale#checking',
-            \  'linter_warnings': 'lightline#ale#warnings',
-            \  'linter_errors': 'lightline#ale#errors',
-            \  'linter_ok': 'lightline#ale#ok',
+            \   'cocerror': 'LightLineCocError',
+            \   'cocwarn' : 'LightLineCocWarn',
+            \   'cocok' : 'LightLineCocOK',
             \    },
             \'component_type': {
-            \  'linter_checking': 'left',
-            \  'linter_warnings': 'warning',
-            \  'linter_errors': 'error',
+            \   'cocerror': 'error',
+            \   'cocwarn' : 'warning',
             \ },
             \ 'separator':      { 'left': "\ue0b0", 'right': "\ue0b2" },
             \ 'subseparator':   { 'left': "\ue0b1", 'right': "\ue0b3" },
             \ }
-            "   'linter_warnings': 'LightlineYcmWarnings',
-            "   'linter_errors': 'LightlineYcmErrors'
 
 nnoremap <F5> :call lightline#update()<CR>
 
@@ -508,67 +534,15 @@ function! LightLineGit()
 endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                   ALE                                        "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" fix files on save
-let g:ale_fix_on_save = 1
-
-" lint after 500ms after changes are made both on insert mode and normal mode
-let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_delay = 500
-
-" use nice symbols for errors and warnings
-let g:ale_sign_error = '▸▸'
-let g:ale_sign_warning = '--'
-
-" fixer configurations
-let g:ale_fixers = {
-            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \}
-
-let g:ale_linters = {
-            \   'c': ['ccls'],
-            \   'cpp': ['ccls'],
-            \   'vim': ['vint'],
-            \   'bash': ['language-server']
-            \}
-
-let g:ale_echo_msg_error_str = 'Error'
-let g:ale_echo_msg_warning_str = 'Warning'
-let g:ale_echo_msg_format = '[%severity%] %s [%linter%]'
-
-let g:lightline#ale#indicator_warnings = "! "
-let g:lightline#ale#indicator_errors = "✗ "
-let g:lightline#ale#indicator_ok = ""
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  ctrlp                                       "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Use Vim's cwd
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:30'
-
-" Faster indexing of files; requires having ag (AKA the_silver_searcher)
-" installed.
-let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-      \ --ignore .git
-      \ --ignore .ccls-cache
-      \ --ignore .svn
-      \ --ignore .hg
-      \ --ignore .DS_Store
-      \ --ignore "**/*.pyc"
-      \ --ignore BoostParts
-      \ -g ""'
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  COC.nvim                                    "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " COC init
 let g:coc_global_extensions = [
             \   'coc-snippets',
             \   'coc-ccls',
             \   'coc-sh',
+            \   'coc-python',
             \   'coc-vimlsp',
             \   ]
 
@@ -617,22 +591,61 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 autocmd CursorHoldI * silent call CocActionAsync('showSignatureHelp')
 
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-
 augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json,c,cpp,python setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    autocmd!
+    " Setup formatexpr specified filetype(s).
+    autocmd FileType typescript,json,c,cpp,python setl formatexpr=CocAction('formatSelected')
+    " Update signature help on jump placeholder
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 autocmd CursorMovedI * if &previewwindow != 1 | pclose | endif
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <F9>  :<C-u>CocList diagnostics<cr>
+" Find symbol of current document
+nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
+
+function! LightLineCocError()
+  let s:error_sign = get(g:, 'coc_status_error_sign', '× ')
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info)
+    return ''
+  endif
+  let errmsgs = []
+  if get(info, 'error', 0)
+    call add(errmsgs, s:error_sign . info['error'])
+  endif
+  return trim(join(errmsgs, ' '))
+endfunction
+
+function! LightLineCocWarn() abort
+  let s:warning_sign = get(g:, 'coc_status_warning_sign', '• ')
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info)
+    return ''
+  endif
+  let warnmsgs = []
+  if get(info, 'warning', 0)
+    call add(warnmsgs, s:warning_sign . info['warning'])
+  endif
+  return trim(join(warnmsgs, ' '))
+endfunction
+
+function! LightLineCocOK() abort
+    let info = get(b:, 'coc_diagnostic_info', {})
+    let count = get(info, 'warning', 0) + get(info, 'error', 0)
+    if count == 0
+        return trim('✓' . get(g:, 'coc_status', ''))
+    else
+        return ''
+    endif
+endfunction
+
+autocmd User CocDiagnosticChange call lightline#update()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                End of file                                   "

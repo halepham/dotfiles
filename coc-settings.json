@@ -1,64 +1,61 @@
 {
+  "python.jediEnabled": false,
+  "python.linting.pep8Enabled" : true,
+  "python.pythonPath" : "python3",
   "suggest.maxCompleteItemCount": 20,
-  "diagnostic.displayByAle": true,
-  "diagnostic.infoSign": "ღ",
-  "diagnostic.hintSign": "ஐ",
-  "diagnostic.warningSign": "- ",
-  "diagnostic.errorSign": "▸ ",
+  "diagnostic.warningSign": "--",
+  "diagnostic.errorSign": "▸▸",
   "diagnostic.enable": true,
-  "diagnostic.signOffset": 9999999,
-  "diagnostic.highlightOffset": 9999999,
   "diagnostic.refreshOnInsertMode": true,
   "suggest.enablePreview": true,
   "suggest.minTriggerInputLength": 2,
-  "suggest.snippetIndicator": "[+] ",
   "suggest.timeout": 1000,
   "suggest.removeDuplicateItems": true,
   "suggest.completionItemKindLabels": {
-    "keyword": "keyword",
-    "variable": "variable",
-    "value": "value",
-    "operator": "operator",
-    "function": "function",
-    "reference": "reference",
-    "constant": "constant",
-    "method": "method",
-    "struct": "struct",
-    "class": "class",
-    "interface": "interface",
-    "text": "text",
-    "enum": "enum",
-    "enumMember": "enumMember",
-    "module": "module",
-    "color": "color",
-    "property": "property",
-    "field": "field",
-    "unit": "unit",
-    "event": "event",
-    "file": "file",
-    "folder": "folder",
-    "snippet": "snippet",
-    "typeParameter": "parameter",
-    "default": ""
+    "keyword"       : "keyword",    // \uf1de 
+    "variable"      : "variable",   // \ue79b 
+    "value"         : "value",      // \uf89f 
+    "operator"      : "operator",   // \u03a8 Ψ
+    "function"      : "function",   // \u0192 ƒ
+    "reference"     : "reference",  // \ufa46 渚
+    "constant"      : "constant",   // \uf8fe 
+    "method"        : "method",     // \uf09a 
+    "struct"        : "struct",     // \ufb44 פּ
+    "class"         : "class",      // \uf0e8 
+    "interface"     : "interface",  // \uf417 
+    "text"          : "text",       // \ue612 
+    "enum"          : "enum",       // \uf435 
+    "enumMember"    : "enumMember", // \uf02b 
+    "module"        : "module",     // \uf40d 
+    "color"         : "color",      // \ue22b 
+    "property"      : "property",   // \ue624 
+    "field"         : "field",      // \uf9be 料
+    "unit"          : "unit",       // \uf475 
+    "event"         : "event",      // \ufacd 鬒
+    "file"          : "file",       // \uf723 
+    "folder"        : "folder",     // \uf114 
+    "snippet"       : "snippet",    // \ue60b 
+    "typeParameter" : "parameter",  // \uf728 
+    "default"       : ""            // \uf29c 
   },
   "languageserver": {
     "ccls": {
       "command": "ccls",
       "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls-root", "compile_commands.json", ".git/", ".ccls"],
-      "trace.server": "verbose",
+      "rootPatterns": [".ccls-root", "compile_commands.json"],
       "initializationOptions": {
-         "cache": {
-           "directory": "/tmp/.ccls-cache"
-         },
-         "compilationDatabaseDirectory": "./build"
-       }
+        "cache": {
+          "directory": "/tmp/ccls-cache"
+        },
+        "client": {
+          "snippetSupport": true
+        }
+      }
     },
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
       "filetypes": ["sh"],
-      "trace.server": "verbose",
       "ignoredRootPaths": ["~"]
     }
   }
