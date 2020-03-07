@@ -639,7 +639,7 @@ function! LightLineCocOK() abort
     let info = get(b:, 'coc_diagnostic_info', {})
     let count = get(info, 'warning', 0) + get(info, 'error', 0)
     if count == 0
-        return trim('✓' . get(g:, 'coc_status', ''))
+        return '✓'
     else
         return ''
     endif
