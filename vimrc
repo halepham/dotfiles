@@ -172,7 +172,7 @@ if has('mouse')
 endif
 
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 
 " [COC issues] Some servers have issues with backup files, see #649
 set nobackup
@@ -338,6 +338,12 @@ nmap <F3> :TagbarToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Disable default mappings
 let g:nnn#set_default_mappings = 0
+
+" set extra key-bindings for opening files in different ways
+let g:nnn#action = {
+      \ '<c-t>': 'tab split',
+      \ '<c-x>': 'split',
+      \ '<c-v>': 'vsplit' }
 
 " Then set your own
 nnoremap <silent> <F2> :NnnPicker '%:p:h'<CR>
