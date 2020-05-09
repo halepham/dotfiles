@@ -79,13 +79,12 @@ set t_Co=256
 " set background=light
 set background=dark
 
-if (empty($TMUX))
-  if (has("nvim"))
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  if (has("termguicolors"))
+" Enable true color
+if (has("nvim"))
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+if (has("termguicolors"))
     set termguicolors
-  endif
 endif
 
 " hide cursor line when focus in on other window
@@ -123,7 +122,7 @@ colorscheme edge
 " colorscheme quantum
 """""""""""""""""""""""""""""""""""""""
 " " available values: 'hard', 'medium'(default), 'soft'
-" let g:gruvbox_material_background = 'soft'
+" let g:gruvbox_material_background = 'hard'
 " colorscheme gruvbox-material
 """""""""""""""""""""""""""""""""""""""
 " let ayucolor="light"  " for light version of theme
@@ -193,7 +192,7 @@ set signcolumn=yes
 set pastetoggle=<F7>
 
 " Width of a line "
-set textwidth=80
+set textwidth=120
 set colorcolumn=+1
 
 " This limits the size of the max number of items to show in Vim's popup menu
@@ -266,6 +265,10 @@ inoremap <Up>   <C-o>gk
 noremap <c-j> 15gj
 noremap <c-k> 15gk
 
+" This is quit one file
+noremap ;q :q<cr>
+" This is quit one file without save
+noremap ;Q :q!<cr>
 " This is quit all
 noremap <leader>q :qa<cr>
 " and quit all without save
@@ -297,9 +300,9 @@ nmap <leader>6 6gt
 nmap <leader>7 7gt
 nmap <leader>8 8gt
 nmap <leader>9 9gt
-" Let 'Alt+[' toggle between this and the last accessed tab
+" Let 'leader+[' toggle between this and the last accessed tab
 let g:lasttab = 1
-nnoremap <m-[> :exe "tabn ".g:lasttab<CR>
+nnoremap <leader>` :exe "tabn ".g:lasttab<CR>
 au TabLeave * let g:lasttab = tabpagenr()
 
 " Resize window
@@ -317,7 +320,7 @@ map <F4> :noh<CR>
 
 " let g:indentLine_color_term = 100
 " let g:indentLine_bgcolor_term = 330
-let g:indentLine_color_gui = '#4c4c4c'
+let g:indentLine_color_gui = '#4e4e4e'
 let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
 let g:indentLine_concealcursor=""
@@ -343,30 +346,81 @@ let g:nnn#set_default_mappings = 0
 let g:nnn#action = {
       \ '<c-t>': 'tab split',
       \ '<c-x>': 'split',
-      \ '<c-v>': 'vsplit' }
+      \ '<c-v>': 'vsplit',
+      \ }
 
 " Then set your own
 nnoremap <silent> <F2> :NnnPicker '%:p:h'<CR>
 
 " Floating window (neovim)
-function! s:layout()
-  let buf = nvim_create_buf(v:false, v:true)
+let g:nnn#layout = {
+            \ 'window': {
+            \       'width': 0.5,
+            \       'height': 0.6,
+            \       'highlight': 'Debug'
+            \           }
+            \ }
 
-  let height = &lines - (float2nr(&lines / 3))
-  let width = float2nr(&columns / 2)
-  " let width = float2nr(&columns - (&columns * 2 / 3))
-
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': 5,
-        \ 'col': 15,
-        \ 'width': width,
-        \ 'height': height
-        \ }
-
-  call nvim_open_win(buf, v:true, opts)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                             floating window                                  "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let s:float_term_border_win = 0
+let s:float_term_win = 0
+function! FloatTerm(...)
+    " Configuration
+    let height = float2nr((&lines - 2) * 0.6)
+    let row = float2nr((&lines - height) / 2)
+    let width = float2nr(&columns * 0.6)
+    let col = float2nr((&columns - width) / 2)
+    " Border Window
+    let border_opts = {
+            \ 'relative': 'editor',
+            \ 'row': row - 4,
+            \ 'col': col - 2,
+            \ 'width': width + 4,
+            \ 'height': height + 5,
+            \ 'style': 'minimal'
+            \ }
+    " Terminal Window
+    let opts = {
+            \ 'relative': 'editor',
+            \ 'row': row,
+            \ 'col': col,
+            \ 'width': width,
+            \ 'height': height,
+            \ 'style': 'minimal'
+            \ }
+    let owl = ["        __       "] +
+            \ ["        00       "] +
+            \ ["       /||\\      "]
+    let top = "╭─────m────m─────" . repeat("─", width - 14) . "╮"
+    let mid = "│" . repeat(" ", width + 2) . "│"
+    let bot = "╰" . repeat("─", width + 2) . "╯"
+    let lines = owl + [top] + repeat([mid], height) + [bot]
+    let bbuf = nvim_create_buf(v:false, v:true)
+    call nvim_buf_set_lines(bbuf, 0, -1, v:true, lines)
+    let s:float_term_border_win = nvim_open_win(bbuf, v:true, border_opts)
+    let buf = nvim_create_buf(v:false, v:true)
+    let s:float_term_win = nvim_open_win(buf, v:true, opts)
+    " Styling
+    call setwinvar(s:float_term_border_win, '&winhl', 'Normal:Normal')
+    call setwinvar(s:float_term_win, '&winhl', 'Normal:Normal')
+    if a:0 == 0
+        terminal
+    elseif a:1 == "python"
+        terminal source ~/.dotfiles/conda_init.sh; python3
+    endif
+    startinsert
+    " Close border window when terminal window close
+    autocmd TermClose * ++once :bd! |
+                \ call nvim_win_close(s:float_term_border_win, v:true) |
+                \ call lightline#update()
 endfunction
-let g:nnn#layout = 'call ' . string(function('<SID>layout')) . '()'
+
+" Open terminal
+nnoremap <Leader>ft :call FloatTerm()<CR>
+" Open node REPL
+nnoremap <Leader>fp :call FloatTerm('python')<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  ctrlp                                       "
@@ -392,14 +446,14 @@ let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
 "                                lightline                                     "
 " colorscheme: wombat, solarized, powerline, powerlineish,                     "
 "              jellybeans, molokai, seoul256, darcula, selenized_dark,         "
-"              Tomorrow, Tomorrow_Night, Tomorrow_Night_Blue, gruvbox-material,"
+"              Tomorrow, Tomorrow_Night, Tomorrow_Night_Blue, gruvbox_material,"
 "              Tomorrow_Night_Bright, Tomorrow_Night_Eighties, PaperColor,     "
 "              landscape, one, materia, material, OldHope, nord, deus,         "
 "              srcery_drk, ayu_mirage, 16color, edge, espresso, quantum        "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:lightline = {
-            \ 'colorscheme': 'edge',
+            \ 'colorscheme': 'one',
             \ 'active': {
             \   'left': [
             \             [ 'readonly', 'mode', 'paste' ],
@@ -440,6 +494,8 @@ let g:lightline = {
             \ },
             \ 'separator':      { 'left': "\ue0b0", 'right': "\ue0b2" },
             \ 'subseparator':   { 'left': "\ue0b1", 'right': "\ue0b3" },
+            \ 'tabline_separator':      { 'left': "\ue0d2", 'right': "" },
+            \ 'tabline_subseparator':   { 'left': "\ue0d2", 'right': "" },
             \ }
 
 nnoremap <F5> :call lightline#update()<CR>
@@ -473,7 +529,8 @@ function! LightLineModified()
 endfunction
 
 function! LightLineFilename()
-    let fname = expand('%')
+    let cwd = getcwd()
+    let fname = substitute(expand('%:p'), cwd . "/", "", "")
     let width = winwidth(0) - 50
     let fname_disp = width > strlen(fname) ? fname : fname[ -1 * width : ]
     if &filetype == "qf"
