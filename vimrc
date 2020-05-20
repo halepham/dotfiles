@@ -314,6 +314,10 @@ nnoremap > <C-W>>
 " No highlight
 map <F4> :noh<CR>
 
+" Fix syntax highlighting breaks for big file after jump or search
+set redrawtime=10000
+map <F6> :syntax sync fromstart<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Indent Line                                    "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

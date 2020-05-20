@@ -1,6 +1,9 @@
 {
   "python.condaPath" : "/opt/anaconda3/bin/conda",
   "python.pythonPath": "/opt/anaconda3/bin/python3",
+  "python.linting.flake8Args": [
+    "--max-line-length=120"
+    ],
   "suggest.maxCompleteItemCount": 20,
   "diagnostic.warningSign": "--",
   "diagnostic.errorSign": "▸▸",
