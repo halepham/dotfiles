@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# make bash expand environment variables to paths on tab completion
+shopt -s direxpand
+
+# dotfile - personal
+D_DRIVE=/media/halepham/D_DRIVE
+E_DRIVE=/media/halepham/EXTENDED

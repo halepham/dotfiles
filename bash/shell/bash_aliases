@@ -12,6 +12,10 @@ alias h='history'
 
 alias dt="date '+%A %B %d %Y %H:%M:%S'"
 
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
+
+# dotfile - personal
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 alias ai='sudo apt-get install'
@@ -39,7 +43,3 @@ alias csd='conda deactivate'
 alias tbw='~/.dotfiles/tbw.sh'
 
 alias py='python3'
-
-# Print each PATH entry on a separate line
-alias path='echo -e ${PATH//:/\\n}'
-
