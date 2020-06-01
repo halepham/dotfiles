@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source $1
+
 # CPU
 function get_cpu_usage() {
     grep "$1" /proc/stat |\
@@ -24,15 +26,15 @@ function cpu() {
 
 function cpu_graph() {
     usage=$( cpu 'cpu ')
-    reset_color="#[fg=colour252, bg=colour235, nobold]"
+    reset_color="#[fg=$fg, bg=$bg, nobold]"
     if (( $( echo "$usage < 20" | bc ) )); then
-        color="#[fg=colour46, bg=colour235, nobold]" # green
+        color="#[fg=$green, bg=$bg, nobold]" # green
     elif (( $( echo "$usage < 50" | bc ) )); then
-        color="#[fg=colour226, bg=colour235, nobold]" # yellow
+        color="#[fg=$yellow, bg=$bg, nobold]" # yellow
     elif (( $( echo "$usage < 80" | bc ) )); then
-        color="#[fg=colour214, bg=colour235, nobold]" # orange
+        color="#[fg=$orange, bg=$bg, nobold]" # orange
     else
-        color="#[fg=colour196, bg=colour235, nobold]" # red
+        color="#[fg=$red, bg=$bg, nobold]" # red
     fi
 
     # Display CPU
@@ -66,15 +68,15 @@ function memmory() {
     mem_used=$( echo "$mem_used/1024" | bc )
 
     # Display memmory
-    reset_color="#[fg=colour252, bg=colour235, nobold]"
+    reset_color="#[fg=$fg, bg=$bg, nobold]"
     if (( $( echo "$mem_used * 100 /$mem_total < 20" | bc ) )); then
-        color="#[fg=colour46, bg=colour235, nobold]" # green
+        color="#[fg=$green, bg=$bg, nobold]" # green
     elif (( $( echo "$mem_used * 100 /$mem_total < 50" | bc ) )); then
-        color="#[fg=colour226, bg=colour235, nobold]" # yellow
+        color="#[fg=$yellow, bg=$bg, nobold]" # yellow
     elif (( $( echo "$mem_used * 100 /$mem_total < 80" | bc ) )); then
-        color="#[fg=colour214, bg=colour235, nobold]" # orange
+        color="#[fg=$orange, bg=$bg, nobold]" # orange
     else
-        color="#[fg=colour196, bg=colour235, nobold]" # red
+        color="#[fg=$red, bg=$bg, nobold]" # red
     fi
     echo "${color}$mem_used${reset_color}/${color}$mem_total${reset_color}MB"
 }
@@ -83,7 +85,7 @@ function memmory() {
 function load_average()
 {
     load=$( uptime | grep -oP '(?<=average: )[0-9., ]+' | sed 's/,//g' )
-    echo "#[fg=colour44, bg=colour235, nobold]$load"
+    echo "#[fg=$blue, bg=$bg, nobold]$load"
 }
 
 printf ' %s %s %s' "$(memmory)" "$(cpu_graph)" "$(load_average)"

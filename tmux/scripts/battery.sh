@@ -1,25 +1,24 @@
 #!/bin/bash
+
+source $1
+
 DIR="/sys/class/power_supply/BAT0"
 charge_full=$( cat $DIR/charge_full )
-echo "$charge_full"
 charge_now=$( cat $DIR/charge_now )
-echo "$charge_now"
 current_now=$( cat $DIR/current_now )
-echo "$current_now"
 batt_status=$( cat $DIR/status )
-echo "$batt_status"
 
 function battery_life() {
     batt_per=$( echo "scale=1;$charge_now * 100 / $charge_full" | bc )
-    reset_color="#[fg=colour252, bg=colour235, nobold]"
+    reset_color="#[fg=$fg, bg=$bg, nobold]"
     if (( $( echo "$batt_per > 80" | bc ) )); then
-        color="#[fg=colour46, bg=colour235, nobold]" # green
+        color="#[fg=$green, bg=$bg, nobold]" # green
     elif (( $( echo "$batt_per > 40" | bc ) )); then
-        color="#[fg=colour226, bg=colour235, nobold]" # yellow
+        color="#[fg=$yellow, bg=$bg, nobold]" # yellow
     elif (( $( echo "$batt_per > 20" | bc ) )); then
-        color="#[fg=colour214, bg=colour235, nobold]" # orange
+        color="#[fg=$orange, bg=$bg, nobold]" # orange
     else
-        color="#[fg=colour196, bg=colour235, nobold]" # red
+        color="#[fg=$red, bg=$bg, nobold]" # red
     fi
 
     # Display battery life
