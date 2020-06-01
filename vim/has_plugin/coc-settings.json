@@ -1,66 +1,67 @@
 {
-  "python.condaPath" : "/opt/anaconda3/bin/conda",
-  "python.pythonPath": "/opt/anaconda3/bin/python3",
-  "python.linting.flake8Args": [
-    "--max-line-length=120"
+    "python.condaPath" : "/opt/anaconda3/bin/conda",
+    "python.pythonPath": "/opt/anaconda3/bin/python3",
+    "python.linting.flake8Args": [
+        "--max-line-length=120"
     ],
-  "suggest.maxCompleteItemCount": 20,
-  "diagnostic.warningSign": "--",
-  "diagnostic.errorSign": "▸▸",
-  "diagnostic.infoSign": "I ",
-  "diagnostic.hintSign": "H ",
-  "diagnostic.enable": true,
-  "diagnostic.refreshOnInsertMode": true,
-  "suggest.enablePreview": true,
-  "suggest.minTriggerInputLength": 2,
-  "suggest.timeout": 1000,
-  "suggest.removeDuplicateItems": true,
-  "suggest.completionItemKindLabels": {
-    "keyword"       : "keyword",    // \uf1de 
-    "variable"      : "variable",   // \ue79b 
-    "value"         : "value",      // \uf89f 
-    "operator"      : "operator",   // \u03a8 Ψ
-    "function"      : "function",   // \u0192 ƒ
-    "reference"     : "reference",  // \ufa46 渚
-    "constant"      : "constant",   // \uf8fe 
-    "method"        : "method",     // \uf09a 
-    "struct"        : "struct",     // \ufb44 פּ
-    "class"         : "class",      // \uf0e8 
-    "interface"     : "interface",  // \uf417 
-    "text"          : "text",       // \ue612 
-    "enum"          : "enum",       // \uf435 
-    "enumMember"    : "enumMember", // \uf02b 
-    "module"        : "module",     // \uf40d 
-    "color"         : "color",      // \ue22b 
-    "property"      : "property",   // \ue624 
-    "field"         : "field",      // \uf9be 料
-    "unit"          : "unit",       // \uf475 
-    "event"         : "event",      // \ufacd 鬒
-    "file"          : "file",       // \uf723 
-    "folder"        : "folder",     // \uf114 
-    "snippet"       : "snippet",    // \ue60b 
-    "typeParameter" : "parameter",  // \uf728 
-    "default"       : ""            // \uf29c 
-  },
-  "languageserver": {
-    "ccls": {
-      "command": "ccls",
-      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls", "compile_commands.json"],
-      "initializationOptions": {
-        "cache": {
-          "directory": "/tmp/.ccls-cache"
-        },
-        "client": {
-          "snippetSupport": true
-        }
-      }
+    "python.formatting.provider":"black",
+    "suggest.maxCompleteItemCount": 20,
+    "diagnostic.warningSign": "--",
+    "diagnostic.errorSign": "▸▸",
+    "diagnostic.infoSign": "I ",
+    "diagnostic.hintSign": "H ",
+    "diagnostic.enable": true,
+    "diagnostic.refreshOnInsertMode": true,
+    "suggest.enablePreview": true,
+    "suggest.minTriggerInputLength": 2,
+    "suggest.timeout": 1000,
+    "suggest.removeDuplicateItems": true,
+    "suggest.completionItemKindLabels": {
+        "keyword"       : "keyword",    // \uf1de 
+        "variable"      : "variable",   // \ue79b 
+        "value"         : "value",      // \uf89f 
+        "operator"      : "operator",   // \u03a8 Ψ
+        "function"      : "function",   // \u0192 ƒ
+        "reference"     : "reference",  // \ufa46 渚
+        "constant"      : "constant",   // \uf8fe 
+        "method"        : "method",     // \uf09a 
+        "struct"        : "struct",     // \ufb44 פּ
+        "class"         : "class",      // \uf0e8 
+        "interface"     : "interface",  // \uf417 
+        "text"          : "text",       // \ue612 
+        "enum"          : "enum",       // \uf435 
+        "enumMember"    : "enumMember", // \uf02b 
+        "module"        : "module",     // \uf40d 
+        "color"         : "color",      // \ue22b 
+        "property"      : "property",   // \ue624 
+        "field"         : "field",      // \uf9be 料
+        "unit"          : "unit",       // \uf475 
+        "event"         : "event",      // \ufacd 鬒
+        "file"          : "file",       // \uf723 
+        "folder"        : "folder",     // \uf114 
+        "snippet"       : "snippet",    // \ue60b 
+        "typeParameter" : "parameter",  // \uf728 
+        "default"       : ""            // \uf29c 
     },
-    "bash": {
-      "command": "bash-language-server",
-      "args": ["start"],
-      "filetypes": ["sh"],
-      "ignoredRootPaths": ["~"]
+    "languageserver": {
+        "ccls": {
+            "command": "ccls",
+            "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+            "rootPatterns": [".ccls", "compile_commands.json"],
+            "initializationOptions": {
+                "cache": {
+                    "directory": "/tmp/.ccls-cache"
+                },
+                "client": {
+                    "snippetSupport": true
+                }
+            }
+        },
+        "bash": {
+            "command": "bash-language-server",
+            "args": ["start"],
+            "filetypes": ["sh"],
+            "ignoredRootPaths": ["~"]
+        }
     }
-  }
 }
