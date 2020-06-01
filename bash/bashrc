@@ -1,7 +1,7 @@
 # dotfile - Start
 if [ -n "$PS1" ]
 then
-    for file in ~/.dotfiles/shell/{bash_prompt,bash_aliases}
+    for file in ~/.bash/{prompt,aliases,profile}
     do
 	    [ -r "$file" ] && [ -f "$file" ] && source "$file"
     done
