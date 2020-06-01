@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# make bash expand environment variables to paths on tab completion
+shopt -s direxpand
