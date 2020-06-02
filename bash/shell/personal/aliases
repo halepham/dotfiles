@@ -27,9 +27,9 @@ alias vim='nvim'
 
 alias rlb='source ~/.bashrc'
 alias vib='vim ~/.bashrc'
-alias vips='vim ~/.dotfiles/shell/bash_prompt'
-alias vial='vim ~/.dotfiles/shell/bash_aliases'
-alias vipr='vim ~/.profile'
+alias vips='vim ~/.bash/prompt'
+alias vial='vim ~/.bash/aliases'
+alias vipr='vim ~/.bash/profile'
 alias viv='vim ~/.config/nvim/init.vim'
 
 alias cdc='cd /media/halepham/C_DRIVE'
@@ -39,6 +39,6 @@ alias cde='cd /media/halepham/EXTENDED'
 alias csa='conda activate'
 alias csd='conda deactivate'
 
-alias tbw='~/.dotfiles/tbw.sh'
+alias tbw='~/.scripts/tbw.sh'
 
 alias py='python3'
