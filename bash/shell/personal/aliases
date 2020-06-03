@@ -36,7 +36,7 @@ alias cdc='cd /media/halepham/C_DRIVE'
 alias cdd='cd /media/halepham/D_DRIVE'
 alias cde='cd /media/halepham/EXTENDED'
 
-alias csa='conda activate'
+alias csa='~/.bash/conda_init.sh' #'conda activate'
 alias csd='conda deactivate'
 
 alias tbw='~/.scripts/tbw.sh'
