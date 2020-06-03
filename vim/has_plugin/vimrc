@@ -182,7 +182,7 @@ set updatetime=300
 
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-"
+
 " always show signcolumns
 set signcolumn=yes
 
@@ -262,8 +262,8 @@ inoremap <Down> <C-o>gj
 inoremap <Up>   <C-o>gk
 
 " for faster scrolling
-noremap <c-j> 15gj
-noremap <c-k> 15gk
+noremap <c-d> 15gj
+noremap <c-u> 15gk
 
 " This is quit one file
 noremap ;q :q<cr>
@@ -277,10 +277,10 @@ noremap <leader>Q :qa!<cr>
 " key bindings for quickly moving between windows
 " w next, h left, l right, k up, j down
 nnoremap <m-w> <C-w>w
-nnoremap <m-h> <C-w>h
-nnoremap <m-j> <C-w>j
-nnoremap <m-k> <C-w>k
-nnoremap <m-l> <C-w>l
+nnoremap <c-h> <C-w>h
+nnoremap <c-j> <C-w>j
+nnoremap <c-k> <C-w>k
+nnoremap <c-l> <C-w>l
 
 " Using '<' and '>' in visual mode to shift code by a tab-width left/right by
 " default exits visual mode. With this mapping we remain in visual mode after
@@ -457,7 +457,7 @@ let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:lightline = {
-            \ 'colorscheme': 'one',
+            \ 'colorscheme': 'deus',
             \ 'active': {
             \   'left': [
             \             [ 'readonly', 'mode', 'paste' ],
