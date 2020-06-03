@@ -103,9 +103,6 @@ set updatetime=300
 
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-"
-" always show signcolumns
-set signcolumn=yes
 
 " toggles vim's paste mode; when we want to paste something into vim from a
 " different application, turning on paste mode prevents the insertion of extra
