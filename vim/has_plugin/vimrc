@@ -6,17 +6,17 @@
 call plug#begin('~/.vim/bundle')
 
 " Theme "
-Plug 'gmoe/vim-espresso'
-Plug 'nanotech/jellybeans.vim'
-Plug 'ajmwagar/vim-deus'
-Plug 'dracula/vim'
-Plug 'rakr/vim-one'
-Plug 'BarretRen/vim-colorscheme'
+" Plug 'gmoe/vim-espresso'
+" Plug 'nanotech/jellybeans.vim'
+" Plug 'ajmwagar/vim-deus'
+" Plug 'dracula/vim'
+" Plug 'rakr/vim-one'
+" Plug 'BarretRen/vim-colorscheme'
 Plug 'sainnhe/edge'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'tyrannicaltoucan/vim-quantum'
-Plug 'sainnhe/gruvbox-material'
-Plug 'ayu-theme/ayu-vim'
+" Plug 'NLKNguyen/papercolor-theme'
+" Plug 'tyrannicaltoucan/vim-quantum'
+" Plug 'sainnhe/gruvbox-material'
+" Plug 'ayu-theme/ayu-vim'
 
 " Show indent line "
 Plug 'Yggdroot/indentLine'
@@ -39,6 +39,10 @@ Plug 'jiangmiao/auto-pairs'
 
 " Language Server Protocol "
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Auto-completion | Syntax & checking "
+" Plug 'dense-analysis/ale'
+" Plug 'maximbaz/lightline-ale'
 
 if has('nvim')
     " Plugin to read or write files with sudo command'.
@@ -226,7 +230,7 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
-let mapleader = "."
+let mapleader = ","
 
 " Export $MYVIMRC to set neovim init is sourced
 let $MYVIMRC='~/.config/nvim/init.vim'
@@ -498,9 +502,12 @@ let g:lightline = {
             \ },
             \ 'separator':      { 'left': "\ue0b0", 'right': "\ue0b2" },
             \ 'subseparator':   { 'left': "\ue0b1", 'right': "\ue0b3" },
-            \ 'tabline_separator':      { 'left': "\ue0d2", 'right': "" },
-            \ 'tabline_subseparator':   { 'left': "\ue0d2", 'right': "" },
+            \ 'tabline_separator':      { 'left': "", 'right': "" },
+            \ 'tabline_subseparator':   { 'left': "|", 'right': "|" },
             \ }
+            "   'linter_warnings': 'LightlineYcmWarnings',
+            "   'linter_errors': 'LightlineYcmErrors'
+            "   , 'linter_errors', 'linter_warnings', 'linter_ok'
 
 nnoremap <F5> :call lightline#update()<CR>
 
@@ -721,3 +728,115 @@ autocmd User CocDiagnosticChange call lightline#update()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                End of file                                   "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                   ALE                                        "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" " fix files on save
+" let g:ale_fix_on_save = 1
+"
+" " lint after 200ms after changes are made both on insert mode and normal mode
+" let g:ale_lint_on_text_changed = 'always'
+" let g:ale_lint_delay = 200
+"
+" " use nice symbols for errors and warnings
+" let g:ale_sign_error = '▸▸'
+" let g:ale_sign_warning = '--'
+"
+" " fixer configurations
+" let g:ale_fixers = {
+"             \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+"             \}
+"
+" let g:ale_linters = {
+"             \   'c': ['ccls'],
+"             \   'cpp': ['ccls'],
+"             \   'vim': ['vint'],
+"             \   'bash': ['language-server'],
+"             \   'python': ['flake8']
+"             \}
+"
+" let g:ale_echo_msg_error_str = 'Error'
+" let g:ale_echo_msg_warning_str = 'Warning'
+" let g:ale_echo_msg_format = '[%severity%] %s [%linter%]'
+"
+" let g:lightline#ale#indicator_warnings = "! "
+" let g:lightline#ale#indicator_errors = "✗ "
+" let g:lightline#ale#indicator_ok = ""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                 ListToggle                                   "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" let g:lt_location_list_toggle_map = '<F9>'
+" let g:lt_quickfix_list_toggle_map = '<NOP>'
+" let g:lt_height = 5
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                YouCompleteMe                                 "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:ycm_use_clangd = 1
+" let g:ycm_autoclose_preview_window_after_completion = 1
+" let g:ycm_min_num_of_chars_for_completion = 3
+" let g:ycm_min_num_identifier_candidate_chars = 3
+"
+" " Also see the 'pumheight' vim option!
+" let g:ycm_max_num_identifier_candidates = 10
+" let g:ycm_clangd_uses_ycmd_caching = 1
+" let g:ycm_always_populate_location_list = 1
+" let g:ycm_show_diagnostics_ui = 1
+"
+" let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+" " let g:ycm_global_ycm_extra_conf =
+" "           \ '~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
+"
+" let g:ycm_max_diagnostics_to_display = 0
+" let g:ycm_error_symbol = '▸▸'
+" let g:ycm_warning_symbol = '--'
+"
+" let g:ycm_goto_buffer_command = 'new-or-existing-tab'
+"
+" let g:ycm_key_list_select_completion = ['<Tab>']
+" let g:ycm_key_list_previous_completion = ['<S-TAB>']
+" let g:ycm_key_list_stop_completion = ['<Enter>', '<UP>', '<DOWN>' ]
+"
+" let g:ycm_filetype_whitelist = {
+" 			\ \"c":1,
+" 			\ \"cpp":1,
+" 			\ \"objc":1,
+" 			\ \"sh":1,
+" 			\ \"zsh":1,
+" 			\ \"zimbu":1,
+" 			\ \"python":1,
+" 			\ }
+"
+" "function! s:CustomizeYcmLocationWindow()
+" "  " Move the window to the top of the screen.
+" "  wincmd K
+" "  " Set the window height to 5.
+" "  5wincmd _
+" "  " Switch back to working window.
+" "  wincmd p
+" "endfunction
+" "autocmd User YcmLocationOpened call s:CustomizeYcmLocationWindow()
+"
+" " nnoremap <F10> :YcmDiags<CR>:lcl<CR>
+" nnoremap <leader>y  :YcmForceCompileAndDiagnostics<cr>
+" nnoremap <leader>g :YcmCompleter GoTo<CR>:NERDTreeFocus<CR><C-w>p
+" nnoremap <m-]> :YcmCompleter GoToDefinition<CR>:NERDTreeFocus<CR><C-w>p
+" nnoremap <m-}> :YcmCompleter GoToDeclaration<CR>:NERDTreeFocus<CR><C-w>p
+"
+" " Using <space> at the end to make it more visible and prevent trimming
+" nnoremap <f6> :YcmCompleter RefactorRename<space>
+"
+" " functions for Lightline
+" function! LightlineYcmErrors()
+"     let cnt = youcompleteme#GetErrorCount()
+"     return cnt > 0 ? string(cnt) . \"\ue20c" : ''
+" endfunction
+"
+" function! LightlineYcmWarnings()
+"     let cnt = youcompleteme#GetWarningCount()
+"     return cnt > 0 ? string(cnt) . \"\ue240" : ''
+" endfunction
+"
