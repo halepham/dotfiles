@@ -12,7 +12,12 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable detection, plugins and indenting in one step
 " This needs to come AFTER the Plugin commands!
-filetype plugin indent on
+if has("autocmd")
+    filetype plugin indent on
+endif
+if has("syntax") && !exists("g:syntax_on")
+    syntax enable
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                            General settings                                  "
@@ -53,6 +58,7 @@ colorscheme edge
 
 " Display settings "
 set scrolloff=4     " 4 lines above/below cursor when scrolling
+set sidescrolloff=5 " 5 cols left/right cursor when scrolling
 " set showmatch     " show matching bracket (briefly jump)
 " set showcmd       " show typed command in status bar
 set ruler           " show cursor position in status bar
@@ -72,6 +78,11 @@ set smartcase       " turn on smartcase
 
 " Editor settings "
 " set showtabline=2
+set autoindent
+set backspace=indent,eol,start
+set complete-=i
+set smarttab
+set incsearch
 set tabstop=4       " number of spaces a tab counts for
 set shiftwidth=4    " spaces for autoindents
 set softtabstop=4
@@ -142,7 +153,7 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
-let mapleader = "."
+let mapleader = ","
 
 " Export $MYVIMRC to set neovim init is sourced
 let $MYVIMRC='~/.config/nvim/init.vim'
@@ -193,10 +204,10 @@ noremap <leader>Q :qa!<cr>
 " key bindings for quickly moving between windows
 " w next, h left, l right, k up, j down
 nnoremap <m-w> <C-w>w
-nnoremap <m-h> <C-w>h
-nnoremap <m-j> <C-w>j
-nnoremap <m-k> <C-w>k
-nnoremap <m-l> <C-w>l
+nnoremap <c-h> <C-w>h
+nnoremap <c-j> <C-w>j
+nnoremap <c-k> <C-w>k
+nnoremap <c-l> <C-w>l
 
 " Using '<' and '>' in visual mode to shift code by a tab-width left/right by
 " default exits visual mode. With this mapping we remain in visual mode after
