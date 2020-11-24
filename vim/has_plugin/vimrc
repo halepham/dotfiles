@@ -148,6 +148,13 @@ set ruler           " show cursor position in status bar
 " set title         " show file in titlebar
 set cursorline      " highlights the current line
 set number          " Display line number
+set relativenumber  " show the distance to that line
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 
 " When you type the first tab, it will complete as much as possible, the second
 " tab hit will provide a list, the third and subsequent tabs will cycle through
