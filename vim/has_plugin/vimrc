@@ -68,7 +68,12 @@ augroup END
 
 " Enable detection, plugins and indenting in one step
 " This needs to come AFTER the Plugin commands!
-filetype plugin indent on
+if has("autocmd")
+    filetype plugin indent on
+endif
+if has("syntax") && !exists("g:syntax_on")
+    syntax enable
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                            General settings                                  "
@@ -136,6 +141,7 @@ colorscheme edge
 
 " Display settings "
 set scrolloff=4     " 4 lines above/below cursor when scrolling
+set sidescrolloff=5 " 5 cols left/right cursor when scrolling
 " set showmatch     " show matching bracket (briefly jump)
 " set showcmd       " show typed command in status bar
 set ruler           " show cursor position in status bar
@@ -155,6 +161,11 @@ set smartcase       " turn on smartcase
 
 " Editor settings "
 " set showtabline=2
+set autoindent
+set backspace=indent,eol,start
+set complete-=i
+set smarttab
+set incsearch
 set tabstop=4       " number of spaces a tab counts for
 set shiftwidth=4    " spaces for autoindents
 set softtabstop=4
