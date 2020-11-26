@@ -30,3 +30,74 @@ alias vips='vim ~/.bash/prompt'
 alias vial='vim ~/.bash/aliases'
 alias vipr='vim ~/.bash/profile'
 alias viv='vim ~/.config/nvim/init.vim'
+
+fe() {
+    local file
+    file=$(fzf-tmux --query="$1" --select-1 --exit-0)
+    [ -n "$file" ] && ${EDITOR:-nvim} "$file"
+}
+
+is_in_git_repo() {
+    git rev-parse HEAD > /dev/null 2>&1
+}
+
+# fco - checkout git branch/tag
+fco() {
+    local tags branches target
+    is_in_git_repo || return
+    tags=$(                                         \
+        git tag                                     |
+        awk '{print "\x1b[31;1mtag\x1b[m\t" $1}'    \
+    ) || return
+    branches=$(                                     \
+        git branch --all                            |
+        grep -v HEAD                                |
+        sed "s/.* //"                               |
+        sed "s#remotes/[^/]*/##"                    |
+        sort -u                                     |
+        awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}' \
+    ) || return
+    target=$(                                       \
+        (echo "$tags"; echo "$branches")            |
+        sed '/^$/d'                                 |
+        fzf --no-hscroll                            \
+            --height 50%                            \
+            --border                                \
+            --reverse                               \
+            --ansi                                  \
+            +m                                      \
+            -d "\t"                                 \
+            -n 2                                    \
+            -q "$*"                                 \
+    ) || return
+    git checkout $(echo "$target" | awk '{print $2}')
+}
+
+gf() {
+    is_in_git_repo || return
+    git -c color.status=always status --short |
+    fzf -m                                                                                                                 \
+        --ansi --nth 2..,..                                                                                                \
+        --bind=ctrl-j:down,ctrl-k:up,ctrl-e:preview-down,ctrl-y:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down \
+        --header "ctrl J/K/E/Y: up/down/preview-down/preview-up"                                                           \
+        --preview '(git diff --color=always -- {-1} | sed 1,4d) | head -500'                                               |
+    cut -c4- | sed 's/.* -> //'
+}
+
+gh() {
+    is_in_git_repo || return
+    git log --date=short                                          \
+            --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" \
+            --graph                                               \
+            --color=always                                        |
+    fzf --ansi                                                                                                             \
+        --no-sort                                                                                                          \
+        --reverse                                                                                                          \
+        --multi                                                                                                            \
+        --bind=ctrl-j:down,ctrl-k:up,ctrl-e:preview-down,ctrl-y:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down \
+        --header "ctrl J/K/E/Y: up/down/preview-down/preview-up"                                                           \
+        --preview 'grep -o "[a-f0-9]\{7,\}" <<< {}                                                                         |
+                   xargs git show --color=always                                                                           |
+                   head -200'                                                                                              |
+    grep -o "[a-f0-9]\{7,\}"
+}
