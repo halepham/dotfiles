@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # some more ls aliases
+alias ls=$'ls --group-directories-first --color=auto --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias ll='ls -AlhF --group-directories-first'
 alias la='ls -A'
 alias l='ls -CF'
@@ -12,9 +13,15 @@ alias h='history'
 
 alias dt="date '+%A %B %d %Y %H:%M:%S'"
 
+alias df='df -Th'
+
+alias du='du -h'
+alias dul='du --max-depth 1 | sort -rh | head'
+
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
 
+alias vi='vim'
 alias vim='nvim'
 
 alias rlb='source ~/.bashrc'
