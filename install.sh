@@ -34,6 +34,8 @@ function install_bash() {
     done
 
     cp $SCRIPT_PATH/bash/inputrc $HOME/.inputrc
+    cp $SCRIPT_PATH/bash/lscolor $HOME/.lscolor
+    echo 'eval "$(dircolors -b $HOME/.lscolor)"' >> $HOME/.bashrc
     if [[ $res == "personal" ]]; then
         # Create script dir
         mkdir -p $HOME/.script/
