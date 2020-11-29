@@ -2,3 +2,33 @@
 
 # make bash expand environment variables to paths on tab completion
 shopt -s direxpand
+
+export PATH=$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.local/usr/bin:$PATH
+export PATH=$PATH:$HOME/go_projects/bin
+export GOPATH="$HOME/go_projects"
+export GOBIN="$GOPATH/bin"
+
+### FZF ###
+export FZF_DEFAULT_OPTS="                           \
+    --bind '?:toggle-preview'                       \
+    --bind 'ctrl-j:down'                            \
+    --bind 'ctrl-k:up'                              \
+    --bind 'ctrl-e:preview-down'                    \
+    --bind 'ctrl-y:preview-up'                      \
+    --bind 'ctrl-u:preview-page-up'                 \
+    --bind 'ctrl-d:preview-page-down'               \
+    --bind 'ctrl-o:execute(nvim {+})'               \
+    --color='hl:034,hl+:046,pointer:154,marker:118' \
+    --prompt='∼ ' --pointer='▶' --marker='✗'        \
+"
+# fzf's command
+export FZF_DEFAULT_COMMAND="    \
+    fd --hidden                 \
+       --follow                 \
+       --exclude '.git'         \
+       --exclude 'node_modules' \
+"
+# CTRL-T's command
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# ALT-C's command
+export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
