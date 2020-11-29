@@ -39,9 +39,9 @@ alias vial='vim ~/.bash/aliases'
 alias vipr='vim ~/.bash/profile'
 alias viv='vim ~/.config/nvim/init.vim'
 
-alias cdc='cd /media/halepham/C_DRIVE'
-alias cdd='cd /media/halepham/D_DRIVE'
-alias cde='cd /media/halepham/EXTENDED'
+alias cdc="cd /media/$USER/C_DRIVE"
+alias cdd="cd /media/$USER/D_DRIVE"
+alias cde="cd /media/$USER/EXTENDED"
 
 alias csa='source ~/.bash/conda_init.sh' #'conda activate'
 alias csd='conda deactivate'
@@ -50,22 +50,12 @@ alias tbw='~/.scripts/tbw.sh'
 
 alias py='python3'
 
+# 256 colors
 256tab() {
-    for k in `seq 0 1`;do
-        for j in `seq $((16+k*18)) 36 $((196+k*18))`;do
-            for i in `seq $j $((j+17))`; do
-                printf "\e[01;$1;38;5;%sm%4s" $i $i;
-            done;echo;
-        done;
-    done
+    curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
 }
 
-fe() {
-    local file
-    file=$(fzf-tmux --query="$1" --select-1 --exit-0)
-    [ -n "$file" ] && ${EDITOR:-nvim} "$file"
-}
-
+### git + FZF ###
 is_in_git_repo() {
     git rev-parse HEAD > /dev/null 2>&1
 }
@@ -102,31 +92,71 @@ fco() {
     git checkout $(echo "$target" | awk '{print $2}')
 }
 
+# gf - git diff
 gf() {
     is_in_git_repo || return
-    git -c color.status=always status --short |
-    fzf -m                                                                                                                 \
-        --ansi --nth 2..,..                                                                                                \
-        --bind=ctrl-j:down,ctrl-k:up,ctrl-e:preview-down,ctrl-y:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down \
-        --header "ctrl J/K/E/Y: up/down/preview-down/preview-up"                                                           \
-        --preview '(git diff --color=always -- {-1} | sed 1,4d) | head -500'                                               |
+    git -c color.status=always                                               \
+        status                                                               \
+        --short                                                              |
+    fzf -m                                                                   \
+        --ansi                                                               \
+        --nth 2..,..                                                         \
+        --preview '(git diff --color=always -- {-1} | sed 1,4d) | head -500' |
     cut -c4- | sed 's/.* -> //'
 }
 
+# gh - git log
 gh() {
     is_in_git_repo || return
     git log --date=short                                          \
             --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" \
             --graph                                               \
             --color=always                                        |
-    fzf --ansi                                                                                                             \
-        --no-sort                                                                                                          \
-        --reverse                                                                                                          \
-        --multi                                                                                                            \
-        --bind=ctrl-j:down,ctrl-k:up,ctrl-e:preview-down,ctrl-y:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down \
-        --header "ctrl J/K/E/Y: up/down/preview-down/preview-up"                                                           \
-        --preview 'grep -o "[a-f0-9]\{7,\}" <<< {}                                                                         |
-                   xargs git show --color=always                                                                           |
-                   head -200'                                                                                              |
-    grep -o "[a-f0-9]\{7,\}"
+    fzf --ansi                                                    \
+        --no-sort                                                 \
+        --reverse                                                 \
+        --multi                                                   \
+        --preview 'grep -o "[a-f0-9]\{7,\}" <<< {}                |
+                   xargs git show --color=always                  |
+                   head -200'                                     |
+    rg -o "[a-f0-9]\{7,\}"
+}
+
+### FZF ###
+_fzf_compgen_path() {
+    $FZF_DEFAULT_COMMAND . "$1"
+}
+_fzf_compgen_dir() {
+    $FZF_DEFAULT_COMMAND --type d . "$1"
+}
+
+#fzf open file
+fe() {
+    fzf --height 80%                                       \
+        --reverse                                          \
+        --ansi                                             \
+        -q "$1"                                            \
+        --preview '([[ -f {} ]] && cat {}) ||              \
+                   ([[ -d {} ]] && (tree -C {} | less)) || \
+                   echo {} 2> /dev/null | head -200'
+}
+
+# find-in-file - usage: fif <SEARCH_TERM>
+fif() {
+    if [ ! "$#" -gt 0 ]; then
+        echo "Need a string to search for!"
+        return 1
+    fi
+    rg --files-with-matches          \
+       --hidden                      \
+       --follow                      \
+       --glob "!.git/*"              \
+       --smart-case                  \
+       --no-messages                 \
+       "$1"                          |
+    fzf $FZF_PREVIEW_WINDOW          \
+        --preview "rg --smart-case   \
+                      --pretty       \
+                      --context 5    \
+                      '$1' {}"
 }
