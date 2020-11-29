@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # some more ls aliases
-alias ls=$'ls --group-directories-first --color=auto --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
+alias ls=$'ls --group-directories-first --color=auto --time-style="+\e[32m%Y-%m-%d \e[35m%k:%M\e[m"'
 alias ll='ls -AlhF --group-directories-first'
 alias la='ls -A'
 alias l='ls -CF'
