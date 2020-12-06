@@ -9,8 +9,34 @@ git_branch() {
 
     BRANCH+="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
 		git describe --all --exact-match HEAD 2> /dev/null || \
-		git rev-parse --short HEAD 2> /dev/null) "
-    echo "$BRANCH"
+		git rev-parse --short HEAD 2> /dev/null)"
+
+    s=""
+    # check if the current directory is in .git before running git checks
+    if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == "false" ]; then
+        # ensure index is up to date
+        git update-index --really-refresh  -q &>/dev/null
+        # check for uncommitted changes in the index
+        if ! $(git diff --quiet --ignore-submodules --cached); then
+            s="$s+";
+        fi
+        # check for unstaged changes
+        if ! $(git diff-files --quiet --ignore-submodules --); then
+            s="$s!";
+        fi
+        # check for untracked files
+        if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+            s="$s?";
+        fi
+        # check for stashed files
+        if $(git rev-parse --verify refs/stash &>/dev/null); then
+            s="$s$";
+        fi
+    fi
+
+    [ ! -z $s ] && s="[$s]"
+
+    echo "$BRANCH$s "
 }
 
 check_branch() {
