@@ -137,6 +137,7 @@ fe() {
         --reverse                                          \
         --ansi                                             \
         -q "$1"                                            \
+        --bind 'enter:execute(nvim {+})'                   \
         --preview '([[ -f {} ]] && cat {}) ||              \
                    ([[ -d {} ]] && (tree -C {} | less)) || \
                    echo {} 2> /dev/null | head -200'
