@@ -2,12 +2,13 @@
 
 # some more ls aliases
 alias ls=$'ls --group-directories-first --color=auto --time-style="+\e[32m%Y-%m-%d \e[35m%k:%M\e[m"'
-alias ll='ls -AlhF --group-directories-first'
-alias la='ls -A'
+alias ll='ls -lhF'
+alias lla='ls -AlhF'
+alias la='ls -AF'
 alias l='ls -CF'
 
 # aliases add by user
-alias lt='ls -alFht'
+alias lt='ls -AlFht'
 
 alias h='history'
 
