@@ -83,8 +83,8 @@ gf() {
     fzf -m                                                                   \
         --ansi                                                               \
         --nth 2..,..                                                         \
-        --preview '(git diff --color=always -- {-1} | sed 1,4d) | head -500' |
-    cut -c4- | sed 's/.* -> //'
+        --bind 'enter:execute(git difftool {-1})'                            \
+        --preview '(git diff --color=always -- {-1} | sed 1,4d) | head -500'
 }
 
 # gh - git log

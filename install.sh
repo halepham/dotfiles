@@ -111,14 +111,20 @@ function install_tmux() {
     # Checking tmux version
     if [[ "$(echo "$TMUX_VER >= 3.2" | bc)" == 1 ]]; then
         cp $SCRIPT_PATH/tmux/.tmux.conf $HOME/.tmux.conf
-        cp $SCRIPT_PATH/tmux/scripts/* $TMUX_DIR/scripts/
-        cp $SCRIPT_PATH/tmux/themes/* $TMUX_DIR/themes/
+        cp -r $SCRIPT_PATH/tmux/scripts/* $TMUX_DIR/scripts/
+        cp -r $SCRIPT_PATH/tmux/themes/* $TMUX_DIR/themes/
     elif [[ "$(echo "$TMUX_VER < 3.2" | bc)" == 1 ]]; then
         echo "Update tmux >= 3.2 please!"
     else
         echo "Tmux not found!"
     fi
     echo Finish setup Tmux
+}
+
+function install_config() {
+    echo Installing git config
+    cp $SCRIPT_PATH/gitconfig $HOME/.gitconfig
+    echo Finish git config
 }
 
 # Main
@@ -129,4 +135,5 @@ else
     install_bash
     install_vim
     install_tmux
+    install_config
 fi
