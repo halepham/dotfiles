@@ -90,17 +90,17 @@ gf() {
 # gh - git log
 gh() {
     is_in_git_repo || return
-    git log --date=short                                          \
-            --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" \
-            --graph                                               \
-            --color=always                                        |
-    fzf --ansi                                                    \
-        --no-sort                                                 \
-        --reverse                                                 \
-        --multi                                                   \
-        --preview 'grep -o "[a-f0-9]\{7,\}" <<< {}                |
-                   xargs git show --color=always                  |
-                   head -200'                                     |
+    git log --date=short                                                  \
+            --format="%C(green)%C(bold)%cd %C(auto)%h%d %s %C(cyan)(%an)" \
+            --graph                                                       \
+            --color=always                                                |
+    fzf --ansi                                                            \
+        --no-sort                                                         \
+        --reverse                                                         \
+        --multi                                                           \
+        --preview 'grep -o "[a-f0-9]\{7,\}" <<< {}                        |
+                   xargs git show --color=always                          |
+                   head -200'                                             |
     rg -o "[a-f0-9]\{7,\}"
 }
 
