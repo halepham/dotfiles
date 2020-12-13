@@ -133,14 +133,14 @@ _fzf_compgen_dir() {
 
 #fzf open file
 fe() {
-    fzf --height 80%                                       \
-        --reverse                                          \
-        --ansi                                             \
-        -q "$1"                                            \
-        --bind 'enter:execute(nvim {+})'                   \
-        --preview '([[ -f {} ]] && cat {}) ||              \
-                   ([[ -d {} ]] && (tree -C {} | less)) || \
-                   echo {} 2> /dev/null | head -200'
+    fzf --height 80%                                                        \
+        --reverse                                                           \
+        --ansi                                                              \
+        -q "$1"                                                             \
+        --bind 'enter:execute(nvim {+})'                                    \
+        --preview '([[ -f {} ]] && (bat -n --color=always {} || cat {})) || \
+                   ([[ -d {} ]] && (tree -C {} | less)) ||                  \
+                   file {} 2> /dev/null | head -200'
 }
 
 # find-in-file - usage: fif <SEARCH_TERM>
@@ -149,16 +149,17 @@ fif() {
         echo "Need a string to search for!"
         return 1
     fi
-    rg --files-with-matches          \
-       --hidden                      \
-       --follow                      \
-       --glob "!.git/*"              \
-       --smart-case                  \
-       --no-messages                 \
-       "$1"                          |
-    fzf $FZF_PREVIEW_WINDOW          \
-        --preview "rg --smart-case   \
-                      --pretty       \
-                      --context 5    \
+    rg --files-with-matches              \
+       --hidden                          \
+       --follow                          \
+       --glob "!.git/*"                  \
+       --smart-case                      \
+       --no-messages                     \
+       "$1"                              |
+    fzf $FZF_PREVIEW_WINDOW              \
+        --bind 'enter:execute(nvim {+})' \
+        --preview "rg --smart-case       \
+                      --pretty           \
+                      --context 5        \
                       '$1' {}"
 }
