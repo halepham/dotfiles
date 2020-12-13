@@ -6,7 +6,7 @@ BASH_DIR=$HOME/.bash
 TMUX_DIR=$HOME/.tmux
 SCRIPT_DIR=$HOME/.script
 NVIM_PATH=$(which nvim)
-TMUX_VER=$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")
+TMUX_VER=$(tmux -V | grep -oe"[0-9]*\.[0-9]*")
 
 function backup() {
     echo Starting backup files at $(date)
@@ -114,12 +114,12 @@ function install_tmux() {
     mkdir -p $HOME/.tmux/scripts/../themes
 
     # Checking tmux version
-    if [[ "$(echo "$TMUX_VER == 1.8" | bc)" == 1 ]]; then
-        cp $SCRIPT_PATH/tmux/v1.8/.tmux.conf $HOME/.tmux.conf
-    elif [[ "$(echo "$TMUX_VER >= 2.1" | bc)" == 1 ]]; then
-        cp $SCRIPT_PATH/tmux/latest/.tmux.conf $HOME/.tmux.conf
+    if [[ "$(echo "$TMUX_VER >= 3.2" | bc)" == 1 ]]; then
+        cp $SCRIPT_PATH/tmux/.tmux.conf $HOME/.tmux.conf
         cp $SCRIPT_PATH/tmux/scripts/* $TMUX_DIR/scripts/
         cp $SCRIPT_PATH/tmux/themes/* $TMUX_DIR/themes/
+    elif [[ "$(echo "$TMUX_VER < 3.2" | bc)" == 1 ]]; then
+        echo "Update tmux >= 3.2 please!"
     else
         echo "Tmux not found!"
     fi
