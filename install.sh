@@ -26,7 +26,7 @@ function backup() {
 
 function install_bash() {
     # Create bash dir
-    mkdir -p $HOME/.bash/
+    mkdir -p $HOME/.bash/completions
     echo Seting up bash scripts
     read -p "Install for personal or work: " res
     while ! [[ $res =~ ^(personal|work)$ ]]; do
@@ -37,6 +37,7 @@ function install_bash() {
     cp $SCRIPT_PATH/bash/inputrc $HOME/.inputrc
     cp $SCRIPT_PATH/bash/lscolor $HOME/.lscolor
     cp $SCRIPT_PATH/bash/shell/$res/* $BASH_DIR/
+    cp $SCRIPT_PATH/bash/shell/completions/* $BASH_DIR/completions/
     if [[ $res == "personal" ]]; then
         # Create script dir
         mkdir -p $HOME/.script/
