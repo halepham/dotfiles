@@ -33,20 +33,14 @@ function install_bash() {
         read -p "Input 'personal' or 'work' only: " res
     done
 
+    cat $SCRIPT_PATH/bash/bashrc >> $HOME/.bashrc
     cp $SCRIPT_PATH/bash/inputrc $HOME/.inputrc
     cp $SCRIPT_PATH/bash/lscolor $HOME/.lscolor
-    echo 'eval "$(dircolors -b $HOME/.lscolor)"' >> $HOME/.bashrc
+    cp $SCRIPT_PATH/bash/shell/$res/* $BASH_DIR/
     if [[ $res == "personal" ]]; then
         # Create script dir
         mkdir -p $HOME/.script/
         cp $SCRIPT_PATH/script/* $SCRIPT_DIR/
-
-        cat $SCRIPT_PATH/bash/bashrc >> $HOME/.bashrc
-        echo 'eval "$(register-python-argcomplete3 conda)"' >> $HOME/.bashrc
-        cp $SCRIPT_PATH/bash/shell/personal/* $BASH_DIR/
-    else
-        cat $SCRIPT_PATH/bash/bashrc >> $HOME/.bashrc
-        cp $SCRIPT_PATH/bash/shell/work/* $BASH_DIR/
     fi
     echo Finish setup bash scripts
 }
@@ -127,10 +121,10 @@ function install_tmux() {
 }
 
 # Main
+backup  # safety first! Backup before installing
 if grep "\# dotfile - Start" $HOME/.bashrc > /dev/null ; then
     echo "You have already installed!"
 else
-    backup
     install_bash
     install_vim
     install_tmux

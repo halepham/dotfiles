@@ -7,4 +7,5 @@ then
     done
     unset file
 fi
+eval "$(dircolors -b $HOME/.lscolor)"
 # dotfile - End
