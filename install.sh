@@ -121,6 +121,12 @@ function install_tmux() {
     echo Finish setup Tmux
 }
 
+function install_config() {
+    echo Installing git config
+    cp $SCRIPT_PATH/gitconfig $HOME/
+    echo Finish git config
+}
+
 # Main
 backup  # safety first! Backup before installing
 if grep "\# dotfile - Start" $HOME/.bashrc > /dev/null ; then
@@ -129,4 +135,5 @@ else
     install_bash
     install_vim
     install_tmux
+    install_config
 fi
