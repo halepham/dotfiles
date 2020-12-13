@@ -4,23 +4,28 @@
 shopt -s direxpand
 
 export PATH=$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.local/usr/bin:$PATH
-export PATH=$PATH:$HOME/go_projects/bin
+export PATH=$HOME/go_projects/bin:$PATH
 export GOPATH="$HOME/go_projects"
 export GOBIN="$GOPATH/bin"
 
 ### FZF ###
-export FZF_DEFAULT_OPTS="                           \
-    --bind '?:toggle-preview'                       \
-    --bind 'ctrl-j:down'                            \
-    --bind 'ctrl-k:up'                              \
-    --bind 'ctrl-e:preview-down'                    \
-    --bind 'ctrl-y:preview-up'                      \
-    --bind 'ctrl-u:preview-page-up'                 \
-    --bind 'ctrl-d:preview-page-down'               \
-    --bind 'ctrl-o:execute(nvim {+})'               \
-    --color='hl:034,hl+:046,pointer:154,marker:118' \
-    --prompt='∼ ' --pointer='▶' --marker='✗'        \
+export FZF_DEFAULT_OPTS="                    \
+    --bind '?:toggle-preview'                \
+    --bind 'ctrl-j:down'                     \
+    --bind 'ctrl-k:up'                       \
+    --bind 'ctrl-e:preview-down'             \
+    --bind 'ctrl-y:preview-up'               \
+    --bind 'ctrl-u:preview-page-up'          \
+    --bind 'ctrl-d:preview-page-down'        \
+    --color=dark                             \
+    --color=fg:-1,bg:-1,hl:#5fff87           \
+    --color=fg+:-1,bg+:-1,hl+:#ffaf5f        \
+    --color=info:#af87ff,prompt:#5fff87      \
+    --color=pointer:#ff87d7,marker:#ff87d7   \
+    --color=spinner:#ff87d7                  \
+    --prompt='∼ ' --pointer='▶' --marker='✗' \
 "
+
 # fzf's command
 export FZF_DEFAULT_COMMAND="    \
     fd --hidden                 \
@@ -32,3 +37,10 @@ export FZF_DEFAULT_COMMAND="    \
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # ALT-C's command
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
+
+export FZF_CTRL_T_OPTS="--preview '([[ -f {} ]] && (bat -n --color=always {} || cat {})) || \
+                                   ([[ -d {} ]] && (tree -C {} | less)) ||                  \
+                                   echo {} 2> /dev/null | head -200'"
+export FZF_CTRL_R_OPTS="--preview 'echo {2..}' --preview-window down:3:wrap"
+export FZF_ALT_C_OPTS="--preview '((tree -C {} | less) || file {}) 2> /dev/null | head -200'"
+export FZF_TMUX_OPTS='-p90%,60%'
