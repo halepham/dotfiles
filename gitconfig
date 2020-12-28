@@ -2,14 +2,14 @@
 	name = Hale Pham
 	email = phamanhtu19297@gmail.com
 [merge]
-  tool = vimdiff
+    tool = vimdiff
 [mergetool]
-  prompt = true
+    prompt = true
 [mergetool "vimdiff"]
-  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [difftool]
-  prompt = false
+    prompt = false
 [diff]
-  mnemonicprefix = true
-  tool = vimdiff
-  algorithm = patience
+    mnemonicprefix = true
+    tool = vimdiff
+    algorithm = patience
