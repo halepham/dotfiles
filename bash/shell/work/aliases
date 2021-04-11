@@ -91,17 +91,20 @@ gf() {
 gh() {
     is_in_git_repo || return
     git log --date=short                                                  \
-            --format="%C(green)%C(bold)%cd %C(auto)%h%d %s %C(cyan)(%an)" \
+            --format='%C(bold green)%cd %C(auto)%h%d %s %C(cyan)(%an)'    \
             --graph                                                       \
-            --color=always                                                |
+            --color=always                                                \
+            $@                                                            |
     fzf --ansi                                                            \
         --no-sort                                                         \
         --reverse                                                         \
         --multi                                                           \
+        --bind 'enter:execute(LESS="-c -+F -R $LESS"                      \
+                              git log -p --stat -1 --pretty=newfull       \
+                                      $(rg -o "[a-f0-9]{7,}" <<< {}))'    \
         --preview 'grep -o "[a-f0-9]\{7,\}" <<< {}                        |
-                   xargs git show --color=always                          |
-                   head -200'                                             |
-    rg -o "[a-f0-9]\{7,\}"
+                   xargs git show --color=always --stat                   |
+                   head -200'
 }
 
 ### FZF ###
