@@ -13,3 +13,6 @@
     mnemonicprefix = true
     tool = vimdiff
     algorithm = patience
+[pretty]
+    newoneline = format:%C(bold green)%ci %C(auto)%h%d %s %C(cyan)(%an)
+    newfull = format:%C(yellow)Commit %H%C(auto)%d%n%C(cyan)Author: %an <%ae>%nDate:   %cd%n%n%w(0,4,4)%C(bold blue)%B
