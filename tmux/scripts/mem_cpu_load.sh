@@ -48,7 +48,7 @@ function cpu_graph() {
         fi
     done
     graph+="${reset_color}]${color}"
-    printf '%s %4.1f%%%s' "${graph}" "$usage" "${reset_color}"
+    printf '%s%5.1f%%%s' "${graph}" "$usage" "${reset_color}"
 }
 
 # Memmory
@@ -84,7 +84,7 @@ function memmory() {
 # Load average
 function load_average()
 {
-    load=$( uptime | grep -oP '(?<=average: )[0-9., ]+' | sed 's/,//g' )
+    load=$( uptime | grep -oP '(?<=average: )[0-9., ]+' | sed 's/, / /g' )
     echo "#[fg=$blue, bg=$bg, nobold]$load"
 }
 
