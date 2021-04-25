@@ -26,15 +26,15 @@ function cpu() {
 
 function cpu_graph() {
     usage=$( cpu 'cpu ')
-    reset_color="#[fg=$fg, bg=$bg, nobold]"
+    reset_color="#[fg=$foreground, nobold]"
     if (( $( echo "$usage < 20" | bc ) )); then
-        color="#[fg=$green, bg=$bg, nobold]" # green
+        color="#[fg=$green, nobold]" # green
     elif (( $( echo "$usage < 50" | bc ) )); then
-        color="#[fg=$yellow, bg=$bg, nobold]" # yellow
+        color="#[fg=$yellow, nobold]" # yellow
     elif (( $( echo "$usage < 80" | bc ) )); then
-        color="#[fg=$orange, bg=$bg, nobold]" # orange
+        color="#[fg=$orange, nobold]" # orange
     else
-        color="#[fg=$red, bg=$bg, nobold]" # red
+        color="#[fg=$red, nobold]" # red
     fi
 
     # Display CPU
@@ -68,15 +68,15 @@ function memmory() {
     mem_used=$( echo "$mem_used/1024" | bc )
 
     # Display memmory
-    reset_color="#[fg=$fg, bg=$bg, nobold]"
+    reset_color="#[fg=$foreground, nobold]"
     if (( $( echo "$mem_used * 100 /$mem_total < 20" | bc ) )); then
-        color="#[fg=$green, bg=$bg, nobold]" # green
+        color="#[fg=$green, nobold]" # green
     elif (( $( echo "$mem_used * 100 /$mem_total < 50" | bc ) )); then
-        color="#[fg=$yellow, bg=$bg, nobold]" # yellow
+        color="#[fg=$yellow, nobold]" # yellow
     elif (( $( echo "$mem_used * 100 /$mem_total < 80" | bc ) )); then
-        color="#[fg=$orange, bg=$bg, nobold]" # orange
+        color="#[fg=$orange, nobold]" # orange
     else
-        color="#[fg=$red, bg=$bg, nobold]" # red
+        color="#[fg=$red, nobold]" # red
     fi
     echo "${color}$mem_used${reset_color}/${color}$mem_total${reset_color}MB"
 }
@@ -85,7 +85,7 @@ function memmory() {
 function load_average()
 {
     load=$( uptime | grep -oP '(?<=average: )[0-9., ]+' | sed 's/, / /g' )
-    echo "#[fg=$blue, bg=$bg, nobold]$load"
+    echo "#[fg=$loadFg, nobold]$load"
 }
 
 printf ' %s %s %s' "$(memmory)" "$(cpu_graph)" "$(load_average)"
