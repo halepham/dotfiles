@@ -16,11 +16,14 @@ function backup() {
     mkdir -p $SCRIPT_PATH/backup/
 
     [[ -f $HOME/.inputrc ]] && cp $HOME/.inputrc $BKP/inputrc_$DATE
+    [[ -f $HOME/.lscolor ]] && cp $HOME/.lscolor $BKP/lscolor_$DATE
     [[ -f $HOME/.config/nvim/init.vim ]] && cp $HOME/.config/nvim/init.vim $BKP/init.vim_$DATE
     [[ -f $HOME/.vimrc ]] && cp $HOME/.vimrc $BKP/vimrc_$DATE
     [[ -f $HOME/.vim/coc-settings.json ]] && cp $HOME/.vimrc $BKP/vim_coc-settings.json_$DATE
     [[ -f $HOME/.config/nvim/coc-settings.json ]] && cp $HOME/.vimrc $BKP/nvim_coc-settings.json_$DATE
-    [[ -f $HOME/.tmux.conf ]] &&cp $HOME/.tmux.conf $BKP/tmux.conf_$DATE
+    [[ -f $HOME/.tmux.conf ]] && cp $HOME/.tmux.conf $BKP/tmux.conf_$DATE
+    [[ -d $HOME/.tmux ]] && cp -r $HOME/.tmux $BKP/tmux_$DATE
+    [[ -d $HOME/.bash ]] && cp -r $HOME/.bash $BKP/bash_$DATE
     echo Finish backup files
 }
 
@@ -128,12 +131,13 @@ function install_config() {
 }
 
 # Main
-backup  # safety first! Backup before installing
 if grep "\# dotfile - Start" $HOME/.bashrc > /dev/null ; then
     echo "You have already installed!"
-else
-    install_bash
-    install_vim
-    install_tmux
-    install_config
+    exit
 fi
+
+backup  # safety first! Backup before installing
+install_bash
+install_vim
+install_tmux
+install_config
