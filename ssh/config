@@ -1,0 +1,13 @@
+Host *
+    HostName labPC
+    User hale
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    Compression yes
+    ControlMaster auto
+    ControlPath /tmp/ssh_%r@%h:%p
+    ControlPersist 2h
+    ForwardAgent yes
+    ServerAliveInterval 180
+	ConnectTimeout 1
+    SendEnv LANG LC_ALL
