@@ -283,10 +283,6 @@ vnoremap <Up>   gk
 inoremap <Down> <C-o>gj
 inoremap <Up>   <C-o>gk
 
-" for faster scrolling
-noremap <c-d> 15gj
-noremap <c-u> 15gk
-
 " This is quit one file
 noremap ;q :q<cr>
 " This is quit one file without save
@@ -311,7 +307,6 @@ vnoremap < <gv
 vnoremap > >gv
 
 " TABs to switch files
-nmap <leader>t :tabnext<CR>
 nmap <leader>0 :tablast<CR>
 nmap <leader>1 1gt
 nmap <leader>2 2gt
@@ -324,7 +319,7 @@ nmap <leader>8 8gt
 nmap <leader>9 9gt
 " Let 'leader+[' toggle between this and the last accessed tab
 let g:lasttab = 1
-nnoremap <leader>` :exe "tabn ".g:lasttab<CR>
+nnoremap gl :exe "tabn ".g:lasttab<CR>
 au TabLeave * let g:lasttab = tabpagenr()
 
 " Resize window
@@ -334,7 +329,7 @@ nnoremap < <C-W><
 nnoremap > <C-W>>
 
 " No highlight
-map <F4> :noh<CR>
+map <c-n> :noh<CR>
 
 " Fix syntax highlighting breaks for big file after jump or search
 set redrawtime=10000
@@ -360,7 +355,7 @@ let g:indentLine_char_list = ['┆']
 "                                  Tagbar                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nmap <F3> :TagbarToggle<CR>
+nmap <leader>c :TagbarToggle<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  nnn.vim                                     "
@@ -376,7 +371,7 @@ let g:nnn#action = {
       \ }
 
 " Then set your own
-nnoremap <silent> <F2> :NnnPicker '%:p:h'<CR>
+nnoremap <silent> <leader>t :NnnPicker %:p:h<CR>
 
 " Floating window (neovim)
 let g:nnn#layout = {
@@ -444,9 +439,9 @@ function! FloatTerm(...)
 endfunction
 
 " Open terminal
-nnoremap <Leader>ft :call FloatTerm()<CR>
+nnoremap <leader>ft :call FloatTerm()<CR>
 " Open node REPL
-nnoremap <Leader>fp :call FloatTerm('python')<CR>
+nnoremap <leader>fp :call FloatTerm('python')<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  ctrlp                                       "
@@ -667,7 +662,7 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use ? to show documentation in preview window
-nnoremap <silent> ? :call <SID>show_documentation()<CR>
+nnoremap <silent> gh :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -699,7 +694,7 @@ autocmd CursorMovedI * if &previewwindow != 1 | pclose | endif
 
 " Using CocList
 " Show all diagnostics
-nnoremap <silent> <F9>  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader>`  :<C-u>CocList diagnostics<cr>
 " Find symbol of current document
 nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
