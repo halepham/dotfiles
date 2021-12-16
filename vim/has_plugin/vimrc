@@ -254,7 +254,7 @@ let mapleader = ","
 let $MYVIMRC='~/.config/nvim/init.vim'
 
 " Fast saving
-nnoremap <leader>w :w!<cr>
+nnoremap ;w :w!<cr>
 
 " This command will allow us to save a file we don't have permission to save
 " *after* we have already opened it. Super useful.
