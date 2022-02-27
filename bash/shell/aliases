@@ -40,16 +40,8 @@ alias vial='vim ~/.bash/aliases'
 alias vipr='vim ~/.bash/profile'
 alias viv='vim ~/.config/nvim/init.vim'
 
-alias cdc="cd /media/$USER/C_DRIVE"
-alias cdd="cd /media/$USER/D_DRIVE"
-alias cde="cd /media/$USER/EXTENDED"
-
 alias csa='source ~/.bash/conda_init.sh' #'conda activate'
 alias csd='conda deactivate'
-
-alias tbw='~/.scripts/tbw.sh'
-
-alias py='python3'
 
 # 256 colors
 256tab() {

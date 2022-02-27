@@ -4,7 +4,6 @@ SCRIPT_PATH=$(dirname $0)
 BKP=$SCRIPT_PATH/backup
 BASH_DIR=$HOME/.bash
 TMUX_DIR=$HOME/.tmux
-SCRIPT_DIR=$HOME/.script
 NVIM_PATH=$(which nvim)
 TMUX_VER=$(tmux -V | grep -oe"[0-9]*\.[0-9]*")
 
@@ -31,21 +30,12 @@ function install_bash() {
     # Create bash dir
     mkdir -p $HOME/.bash/completions
     echo Seting up bash scripts
-    read -p "Install for personal or work: " res
-    while ! [[ $res =~ ^(personal|work)$ ]]; do
-        read -p "Input 'personal' or 'work' only: " res
-    done
 
     cat $SCRIPT_PATH/bash/bashrc >> $HOME/.bashrc
     cp $SCRIPT_PATH/bash/inputrc $HOME/.inputrc
     cp $SCRIPT_PATH/bash/lscolor $HOME/.lscolor
-    cp $SCRIPT_PATH/bash/shell/$res/* $BASH_DIR/
+    cp $SCRIPT_PATH/bash/shell/{aliases,profile,prompt,conda_init.sh} $BASH_DIR/
     cp $SCRIPT_PATH/bash/shell/completions/* $BASH_DIR/completions/
-    if [[ $res == "personal" ]]; then
-        # Create script dir
-        mkdir -p $HOME/.script/
-        cp $SCRIPT_PATH/script/* $SCRIPT_DIR/
-    fi
     echo Finish setup bash scripts
 }
 
