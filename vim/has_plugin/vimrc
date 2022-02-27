@@ -223,6 +223,18 @@ set pumheight=10
 set splitbelow
 set splitright
 
+let g:clipboard = {
+        \   'name': 'myClipboard',
+        \   'copy': {
+        \      '+': ['tmux', 'load-buffer', '-'],
+        \      '*': ['xclip', '-quiet', '-i', '-selection', 'clipboard'],
+        \    },
+        \   'paste': {
+        \      '+': ['tmux', 'save-buffer', '-'],
+        \      '*': ['xclip', '-o', '-selection', 'clipboard'],
+        \   },
+        \   'cache_enabled': 1,
+        \ }
 if has('unnamedplus')
   " By default, Vim will not use the system clipboard when yanking/pasting to
   " the default register. This option makes Vim use the system default
