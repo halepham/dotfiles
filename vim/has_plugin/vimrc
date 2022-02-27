@@ -411,9 +411,9 @@ function! FloatTerm(...)
             \ 'height': height,
             \ 'style': 'minimal'
             \ }
-    let owl = ["        __       "] +
-            \ ["        00       "] +
-            \ ["       /||\\      "]
+    let owl = ["\u2800       __       "] +
+            \ ["\u2800       00       "] +
+            \ ["\u2800      /||\\      "]
     let top = "╭─────m────m─────" . repeat("─", width - 14) . "╮"
     let mid = "│" . repeat(" ", width + 2) . "│"
     let bot = "╰" . repeat("─", width + 2) . "╯"
@@ -513,8 +513,8 @@ let g:lightline = {
             \   'cocerror': 'error',
             \   'cocwarn' : 'warning',
             \ },
-            \ 'separator':      { 'left': "\ue0b0", 'right': "\ue0b2" },
-            \ 'subseparator':   { 'left': "\ue0b1", 'right': "\ue0b3" },
+            \ 'separator':      { 'left': "", 'right': "" },
+            \ 'subseparator':   { 'left': "|", 'right': "|" },
             \ 'tabline_separator':      { 'left': "", 'right': "" },
             \ 'tabline_subseparator':   { 'left': "|", 'right': "|" },
             \ }
@@ -531,7 +531,7 @@ function! LightLineReadonly()
     elseif &filetype == "help" || "qf" || "tagbar"
         return ""
     elseif &readonly
-        return "\ue0a2"
+        return "RO"
     else
         return ""
     endif
@@ -598,7 +598,7 @@ function! LightLineLineInfo()
                 \fname =~ 'ControlP' ? '' :
                 \&filetype =~ 'vim-plug' ? '' :
                 \&filetype =~ 'tagbar' ? '' :
-                \printf("%3d%% \ue12f  %3d/%d \ue0a1 : %2d",
+                \printf("%3d%% ::  %3d/%d Ln : %2d",
                 \line('.') * 100 / line('$'),
                 \line('.'), line('$'), col('.'))
     endif
@@ -614,7 +614,7 @@ function! LightLineGit()
                 \fname =~ 'ControlP' ? '' :
                 \&filetype =~ 'vim-plug' ? '' :
                 \&filetype =~ 'tagbar' ? '' :
-                \strlen(branchname) > 0 ? "\ue0a0" . branchname : ''
+                \strlen(branchname) > 0 ? "Br:" . branchname : ''
     endif
 endfunction
 
