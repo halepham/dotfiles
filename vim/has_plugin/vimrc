@@ -637,9 +637,10 @@ endfunction
 " COC init
 let g:coc_global_extensions = [
             \   'coc-snippets',
-            \   'coc-ccls',
+            \   'coc-diagnostic',
+            \   'coc-clangd',
+            \   'coc-jedi',
             \   'coc-sh',
-            \   'coc-python',
             \   'coc-vimlsp',
             \   ]
 
