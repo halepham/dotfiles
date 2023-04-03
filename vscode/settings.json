@@ -1,0 +1,86 @@
+{
+    "workbench.sideBar.location": "right",
+    "workbench.statusBar.visible": true,
+    "workbench.activityBar.visible": true,
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.colorTheme": "Shades of Purple",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorCustomizations": {
+        "[One Dark Pro]": {
+            "statusBar.background": "#1e2618",
+            "statusBar.noFolderBackground": "#1e2618",
+            "statusBar.debuggingBackground": "#1e2618",
+            "statusBar.foreground": "#98C379"
+        },
+        "[Shades of Purple]": {
+            "statusBar.background": "#34004a",
+            "statusBar.noFolderBackground": "#34004a",
+            "statusBar.debuggingBackground": "#34004a",
+            "statusBar.foreground": "#e6e600"
+        },
+        "statusBar.background": "#B48EAD",
+        "statusBar.noFolderBackground": "#B48EAD",
+        "statusBar.debuggingBackground": "#B48EAD",
+        "statusBar.foreground": "#434C5E"
+    },
+    "window.menuBarVisibility": "compact",
+    "window.title": "${dirty} ${activeEditorMedium}${separator}${rootName}${separator}${remoteName}",
+    "extensions.ignoreRecommendations": false,
+    "editor.minimap.enabled": true,
+    "editor.renderControlCharacters": true,
+    "editor.cursorStyle": "block",
+    "editor.cursorBlinking": "smooth",
+    "editor.rulers": [ 120 ],
+    "editor.formatOnSave": false,
+    "editor.fontSize": 16,
+    "editor.fontLigatures": true,
+    "editor.tabCompletion": "on",
+    "editor.wordWrap": "on",
+    "editor.tabSize": 8,
+    "editor.lineNumbers": "relative",
+    "editor.renderWhitespace": "none",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs":"active",
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "vsicons.dontShowNewVersionMessage": true,
+    "explorer.confirmDragAndDrop": false,
+    "terminal.external.windowsExec": "C:\\Program Files\\Git\\git-bash.exe",
+    "terminal.external.linuxExec": "xterm-256color",
+    "clangd.path": "clangd",
+    "clangd.arguments": [
+        "--background-index"
+    ],
+    "vscode-neovim.highlightGroups.highlights": {
+    "Directory": "vim",
+    "IncSearch": {
+    "backgroundColor": "theme.editor.findMatchBackground",
+    "borderColor": "theme.editor.findMatchBorder"
+    },
+    "Search": {
+    "backgroundColor": "theme.editor.findMatchHighlightBackground",
+    "borderColor": "theme.editor.findMatchHighlightBorder"
+    },
+    "Visual": {
+    "backgroundColor": "theme.editor.selectionBackground"
+    },
+    "Conceal": "vim",
+    "Substitute": "vim"
+    },
+    "vscode-neovim.neovimExecutablePaths.win32": "D:\\Programs\\nvim-win64\\bin\\nvim.exe",
+    "vscode-neovim.mouseSelectionStartVisualMode": true,
+    "vscode-neovim.revealCursorScrollLine": true,
+    "vscode-neovim.logOutputToConsole": true,
+    "vscode-neovim.logLevel": "debug",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "black",
+    "python.condaPath": "D:\\tools\\Anaconda3",
+    "python.formatting.blackArgs": [
+        "--line-length=120"
+    ],
+    "python.dataScience.sendSelectionToInteractiveWindow": false,
+    "perl.ctagsPath": "D:\\tools\\ctags\\ctags.exe",
+    "window.zoomLevel": 0,
+    "editor.accessibilitySupport": "off"
+}

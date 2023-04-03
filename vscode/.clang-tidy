@@ -1,0 +1,22 @@
+Checks: '-*, bugprone-(?!reserved\b)\b.*, cert-err34-c, cert-flp30-c, clang-analyzer-*, google-runtime-int, cppcoreguidelines-avoid-goto, linuxkernel-must-use-errs, misc-misplaced-const, misc-redundant-expression, readability-braces-around-statements, readability-implicit-bool-conversion, readability-redundant-*, readability-uppercase-literal-suffix, readability-identifier-naming, readability-function-size'
+
+CheckOptions:
+  - { key: readability-identifier-naming.ClassCase,                  value: lower_case }
+  - { key: readability-identifier-naming.ClassSuffix,                value: _t         }
+  - { key: readability-identifier-naming.ConstantCase,               value: UPPER_CASE }
+  - { key: readability-identifier-naming.EnumCase,                   value: lower_case }
+  - { key: readability-identifier-naming.EnumConstantCase,           value: UPPER_CASE }
+  - { key: readability-identifier-naming.FunctionCase,               value: lower_case }
+  - { key: readability-identifier-naming.IgnoreMainLikeFunctions,    value: 1          }
+  - { key: readability-identifier-naming.MemberCase,                 value: lower_case }
+  - { key: readability-identifier-naming.MethodCase,                 value: lower_case }
+  - { key: readability-identifier-naming.ParameterCase,              value: lower_case }
+  - { key: readability-identifier-naming.StructCase,                 value: lower_case }
+  - { key: readability-identifier-naming.TypeAliasCase,              value: lower_case }
+  - { key: readability-identifier-naming.TypeAliasSuffix,            value: _t         }
+  - { key: readability-identifier-naming.TypedefCase,                value: lower_case }
+  - { key: readability-identifier-naming.TypedefSuffix,              value: _t         }
+  - { key: readability-identifier-naming.UnionCase,                  value: lower_case }
+  - { key: readability-identifier-naming.VariableCase,               value: lower_case }
+  - { key: readability-function-size.LineThreshold,                  value: 25         }
+  - { key: readability-function-size.BranchThreshold,                value: 3          }

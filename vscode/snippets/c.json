@@ -1,0 +1,146 @@
+{
+	"for": {
+		"prefix": "for",
+		"body": [
+			"for (${1:initial}; ${2:expression}; ${3:update})",
+			"{",
+			"\t${4:statement}",
+			"}"
+		],
+		"description": "for loop"
+	},
+	"fori": {
+		"prefix": "fori",
+		"body": [
+			"for (${i} = ${1:0}; ${i} < ${2:length}; ${i}++)",
+			"{",
+			"\t${3:statement}",
+			"}"
+		],
+		"description": "for loop with variable"
+	},
+	"while": {
+		"prefix": "while",
+		"body": [
+			"while (${1:condition})",
+			"{",
+			"\t${2:statement}",
+			"}"
+		],
+		"description": "while loop"
+	},
+	"if": {
+		"prefix": "if",
+		"body": [
+			"if (${1:condition})",
+			"{",
+			"\t${2:statement}",
+			"}"
+		],
+		"description": "if statement"
+	},
+	"else": {
+		"prefix": "else",
+		"body": [
+			"else",
+			"{",
+			"\t${1:statement}",
+			"}"
+		],
+		"description": "else statement"
+	},
+	"else if": {
+		"prefix": "else if",
+		"body": [
+			"else if (${1:condition})",
+			"{",
+			"\t${1:statement}",
+			"}"
+		],
+		"description": "else-if statement"
+	},
+	"enum": {
+		"prefix": "enum",
+		"body": [
+			"enum ${MyEnum}",
+			"{",
+			"\t${1:variable}",
+			"};"
+		],
+		"description": "enum structure"
+	},
+	"#ifdef": {
+		"prefix": "#ifdef",
+		"body": [
+			"#ifdef ${MACRO}",
+			"${statements}",
+			"#endif /* ${MACRO} */"
+		],
+		"description": "#ifdef macro"
+	},
+	"#ifndef": {
+		"prefix": "#ifndef",
+		"body": [
+			"#ifndef ${MACRO}",
+			"#define ${MACRO}",
+			"${statements}",
+			"#endif /* ${MACRO} */"
+		],
+		"description": "#ifndef macro"
+	},
+	"struct": {
+		"prefix": "struct",
+		"body": [
+			"struct ${MyStruct}",
+			"{",
+			"\t${1:variable}",
+			"};"
+		],
+		"description": "struct type"
+	},
+	"switch": {
+		"prefix": "switch",
+		"body": [
+			"switch (${1:switch_on})",
+			"{",
+			"\tcase ${2:condition}:",
+			"\t\t${3:statements}",
+			"\t\tbreak;$4",
+			"\tdefault:",
+			"\t\tbreak;",
+			"}"
+		],
+		"description": "switch statement"
+	},
+	"union": {
+		"prefix": "union",
+		"body": [
+			"union ${MyUnion}",
+			"{",
+			"\t${1:variable}",
+			"};"
+		],
+		"description": "union structure"
+	},
+	"#inc": {
+		"prefix": "#include \"library\"",
+		"body": [
+			"#include \"${1:library}"
+		],
+		"description": "#include \""
+	},
+	"#inc<": {
+		"prefix": "#include <library>",
+		"body": [
+			"#include <${1:library}"
+		],
+		"description": "#include <"
+	},
+	"#def": {
+		"prefix": "#def",
+		"body": [
+			"#define \"${1:MACRO}\" \"${2:statement}\" "
+			],
+		"description": "#define \" \""
+	}
+}
