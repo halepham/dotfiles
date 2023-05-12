@@ -44,12 +44,23 @@
     "editor.inlayHints.enabled": "offUnlessPressed",
     "vsicons.dontShowNewVersionMessage": true,
     "explorer.confirmDragAndDrop": false,
+    "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
     "terminal.external.windowsExec": "C:\\Program Files\\Git\\git-bash.exe",
     "terminal.external.linuxExec": "xterm-256color",
     "clangd.path": "clangd",
     "clangd.arguments": [
-        "--background-index"
+        "--all-scopes-completion",
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=bundled",
+        "--limit-results=6",
+        "--suggest-missing-includes",
+        "--pch-storage=memory",
+        "--cross-file-rename",
+        "--ranking-model=decision_forest",
+        "--inlay-hints=true"
     ],
+    "clangd.checkUpdates": true,
     "vscode-neovim.highlightGroups.highlights": {
     "Directory": "vim",
     "IncSearch": {

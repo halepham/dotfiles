@@ -28,6 +28,8 @@ vnoremap > >gv
 
 nnoremap <leader>n :noh<cr>
 
+set clipboard=unnamedplus
+
 if exists('g:vscode')
     " Save
     nnoremap ;w <Cmd>call VSCodeNotify('workbench.action.files.save')<CR>
