@@ -1,52 +1,113 @@
 // Place your key bindings in this file to override the defaultsauto[]
 [
     {
-        "key": ", t",
-        "command": "workbench.action.toggleSidebarVisibility",
-        "when": "!editorTextFocus && !terminalFocus"
+        "key": "ctrl+shift+e",
+        "command": "workbench.action.closeSidebar",
+        "when": "sideBarVisible"
     },
     {
-        "key": "alt+`",
-        "command": "workbench.action.terminal.toggleTerminal"
+        "key": "ctrl+shift+e",
+        "command": "workbench.files.action.focusFilesExplorer",
+        "when": "!sideBarVisible"
+    },
+    //Disable default implementation
+    {
+        "key": "ctrl+n",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && neovim.init && neovim.mode != insert",
+        "args": "<c-n>"
+    },
+    // Move lines up and down
+    {
+        "key": "alt+j",
+        "command": "editor.action.moveLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "alt+k",
+        "command": "editor.action.moveLinesUpAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    //better scroll
+    {
+        "key": "ctrl+u",
+        "command": "-vscode-neovim.ctrl-u",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "ctrl+d",
+        "command": "-vscode-neovim.ctrl-d",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "ctrl+u",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
+        "args": "<C-u>"
+    },
+    {
+        "key": "ctrl+d",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'",
+        "args": "<C-d>"
+    },
+    // Switch tabs
+    {
+        "key": "shift+h",
+        "command": "workbench.action.previousEditorInGroup",
+        "when": "!sideBarFocus && !panelFocus && !editorTextFocus"
+    },
+    {
+        "key": "shift+l",
+        "command": "workbench.action.nextEditorInGroup",
+        "when": "!sideBarFocus && !panelFocus && !editorTextFocus"
+    },
+    // Terminal
+    {
+        "key": "ctrl+shift+/",
+        "command": "workbench.action.terminal.newWithProfile"
+    },
+    {
+        "key": "ctrl+/",
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active"
+    },
+    // Panel/Sidebar navigation
+    {
+        "key": "escape",
+        "command": "workbench.action.togglePanel",
+        "when": "panelFocus && !terminalFocus"
+    },
+    {
+        "key": "ctrl+`",
+        "command": "workbench.action.toggleMaximizedPanel",
+        "when": "panelFocus"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "panelFocus"
     },
     {
         "key": "ctrl+h",
-        "command": "list.collapse",
-        "when": "listFocus && !inputFocus"
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "sideBarFocus"
+    },
+    // whichkey
+    {
+        "key": "shift+space",
+        "command": "whichkey.show",
+        "when": "!editorTextFocus"
+    },
+    // Switch git diff editor
+    {
+        "key": "ctrl+h",
+        "command": "diffEditor.switchSide",
+        "when": "editorTextFocus && neovim.init && neovim.mode != insert && isInDiffEditor && isInDiffRightEditor"
     },
     {
         "key": "ctrl+l",
-        "command": "list.expand",
-        "when": "listFocus && !inputFocus"
-    },
-    {
-        "key": "ctrl+k",
-        "command": "list.focusUp",
-        "when": "listFocus && !inputFocus"
-    },
-    {
-        "key": "ctrl+j",
-        "command": "list.focusDown",
-        "when": "listFocus && !inputFocus"
-    },
-    {
-        "key": "tab",
-        "command": "selectNextSuggestion",
-        "when": "suggestWidgetVisible"
-    },
-    {
-        "key": "shift+tab",
-        "command": "selectPrevSuggestion",
-        "when": "suggestWidgetVisible"
-    },
-    {
-        "key": "ctrl+j",
-        "command": "workbench.action.quickOpenSelectNext",
-        "when": "inQuickOpen"
-    },
-    {
-        "key": "ctrl+k",
-        "command": "workbench.action.quickOpenSelectPrevious",
-        "when": "inQuickOpen"
+        "command": "diffEditor.switchSide",
+        "when": "editorTextFocus && neovim.init && neovim.mode != insert && isInDiffEditor && isInDiffLeftEditor"
     }
 ]
