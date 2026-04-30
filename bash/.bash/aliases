@@ -38,7 +38,6 @@ alias vib='vim ~/.bashrc'
 alias vips='vim ~/.bash/prompt'
 alias vial='vim ~/.bash/aliases'
 alias vipr='vim ~/.bash/profile'
-alias viv='vim ~/.config/nvim/init.vim'
 
 alias csa='source ~/.bash/conda_init.sh' #'conda activate'
 alias csd='conda deactivate'

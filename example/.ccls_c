@@ -1,8 +1,0 @@
-%c --std=C99
-%h --std=C99
-
-# include dir
--Iinc
--IInc
--Iinclude
--IInclude
