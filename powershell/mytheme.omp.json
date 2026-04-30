@@ -1,0 +1,86 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "console_title_template": "{{.UserName}} at {{.Env.COMPUTERNAME}}",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none",
+            "time_format": "15:04"
+          },
+          "template": "{{ .CurrentDate | date .Format }} <#ffffff>\uf444</> ",
+          "foreground": "#bd93f9",
+          "type": "time",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "\uf0e7",
+          "foreground": "#B5B50D",
+          "type": "root",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "{{ .HostName }} ",
+          "foreground": "#00ff87",
+          "type": "session",
+          "style": "plain",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}#ff0000{{ end }}"
+          ]
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "max_depth": 3,
+            "style": "agnoster_short"
+          },
+          "template": "{{ .Path }} ",
+          "foreground": "#f1fa8c",
+          "type": "path",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "branch_gone_icon": "❎",
+            "branch_identical_icon": "\uf14a",
+            "cache_duration": "none"
+          },
+          "template": "{{ .HEAD }} ",
+          "foreground": "#F3C267",
+          "type": "git",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "style": "roundrock",
+            "threshold": 0
+          },
+          "template": "<#ffffff>\uf0c9</> {{ .FormattedMs }} ",
+          "foreground": "#00FFFF",
+          "type": "executiontime",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "\uf061 ",
+          "foreground": "#ffffff",
+          "type": "text",
+          "style": "plain"
+        }
+      ]
+    }
+  ],
+  "version": 3
+}
