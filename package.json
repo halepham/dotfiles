@@ -1,0 +1,201 @@
+{
+    "tools": [
+        {
+            "name": "nvim",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "neovim"
+            },
+            "linux": {
+                "type": "archive",
+                "url": "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz",
+                "command": [
+                    "curl -fsSL ${url} -o /tmp/nvim.tar.gz",
+                    "tar -xzf /tmp/nvim.tar.gz -C /tmp",
+                    "cp -r /tmp/nvim-linux-x86_64/* ${HOME}/.local/",
+                    "rm -rf /tmp/nvim.tar.gz /tmp/nvim-linux-x86_64"
+                ]
+            }
+        },
+        {
+            "name": "tmux",
+            "linux": {
+                "type": "archive",
+                "url": "https://api.github.com/repos/tmux/tmux-builds/releases/latest",
+                "command": [
+                    "TMUX_VERSION=$(curl -fsSL ${url} | python3 -c \"import sys,json; print(json.load(sys.stdin)['tag_name'])\")",
+                    "TMUX_ARCH=$(uname -m)",
+                    "curl -fsSL https://github.com/tmux/tmux-builds/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}-linux-${TMUX_ARCH}.tar.gz -o /tmp/tmux.tar.gz",
+                    "tar -xzf /tmp/tmux.tar.gz -C /tmp",
+                    "mkdir -p ${HOME}/.local/bin",
+                    "mv /tmp/tmux ${HOME}/.local/bin/tmux",
+                    "chmod +x ${HOME}/.local/bin/tmux",
+                    "rm -f /tmp/tmux.tar.gz"
+                ]
+            }
+        },
+        {
+            "name": "fzf",
+            "any": {
+                "type": "git",
+                "url": "https://github.com/junegunn/fzf.git",
+                "command": [
+                    "git clone --depth 1 ${url} ${HOME}/.fzf",
+                    "${HOME}/.fzf/install"
+                ]
+            }
+        },
+        {
+            "name": "fd",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "fd"
+            },
+            "linux": {
+                "type": "cargo",
+                "package": "fd-find"
+            }
+        },
+        {
+            "name": "rg",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "ripgrep"
+            },
+            "linux": {
+                "type": "cargo",
+                "package": "ripgrep"
+            }
+        },
+        {
+            "name": "bat",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "bat"
+            },
+            "linux": {
+                "type": "cargo",
+                "package": "bat"
+            }
+        },
+        {
+            "name": "lazydocker",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "lazydocker"
+            },
+            "linux": {
+                "type": "git",
+                "url": "https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh",
+                "command": [
+                    "curl ${url} | bash"
+                ]
+            }
+        }
+    ],
+    "setup": [
+        {
+            "name": "gitconfig",
+            "any": [
+                {
+                    "type": "copy",
+                    "override": false,
+                    "source": "bash/.gitconfig",
+                    "target": "${HOME}/.gitconfig"
+                }
+            ]
+        },
+        {
+            "name": "bash",
+            "windows": [
+                {
+                    "type": "link",
+                    "source": "bash/.bash",
+                    "target": "${HOME}/.bash"
+                },
+                {
+                    "type": "copy",
+                    "override": true,
+                    "source": "bash/.inputrc",
+                    "target": "${HOME}/.inputrc"
+                },
+                {
+                    "type": "copy",
+                    "override": true,
+                    "source": "bash/.lscolor",
+                    "target": "${HOME}/.lscolor"
+                },
+                {
+                    "type": "append",
+                    "source": "bash/.bashrc",
+                    "target": "${HOME}/.bashrc",
+                    "marker": "# dotfile - Start"
+                }
+            ],
+            "linux": [
+                {
+                    "type": "link",
+                    "source": "bash/.bash",
+                    "target": "${HOME}/.bash"
+                },
+                {
+                    "type": "link",
+                    "source": "bash/.inputrc",
+                    "target": "${HOME}/.inputrc"
+                },
+                {
+                    "type": "link",
+                    "source": "bash/.lscolor",
+                    "target": "${HOME}/.lscolor"
+                },
+                {
+                    "type": "append",
+                    "source": "bash/.bashrc",
+                    "target": "${HOME}/.bashrc",
+                    "marker": "# dotfile - Start"
+                }
+            ]
+        },
+        {
+            "name": "powershell",
+            "windows": [
+                {
+                    "type": "copy",
+                    "override": true,
+                    "source": "powershell/profile.ps1",
+                    "target": "${POWERSHELL_PROFILE}"
+                }
+            ]
+        },
+        {
+            "name": "tmux",
+            "linux": [
+                {
+                    "type": "link",
+                    "source": "tmux/.tmux.conf",
+                    "target": "${HOME}/.tmux.conf"
+                },
+                {
+                    "type": "link",
+                    "source": "tmux/.tmux",
+                    "target": "${HOME}/.tmux"
+                }
+            ]
+        },
+        {
+            "name": "vim",
+            "any": [
+                {
+                    "type": "link",
+                    "source": "vim",
+                    "target": "${NVIM_CONFIG_DIR}"
+                }
+            ]
+        }
+    ]
+}
