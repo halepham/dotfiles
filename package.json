@@ -13,6 +13,7 @@
                 "command": [
                     "curl -fsSL ${url} -o /tmp/nvim.tar.gz",
                     "tar -xzf /tmp/nvim.tar.gz -C /tmp",
+                    "mkdir -p ${HOME}/.local",
                     "cp -r /tmp/nvim-linux-x86_64/* ${HOME}/.local/",
                     "rm -rf /tmp/nvim.tar.gz /tmp/nvim-linux-x86_64"
                 ]
@@ -26,7 +27,7 @@
                 "command": [
                     "TMUX_VERSION=$(curl -fsSL ${url} | python3 -c \"import sys,json; print(json.load(sys.stdin)['tag_name'])\")",
                     "TMUX_ARCH=$(uname -m)",
-                    "curl -fsSL https://github.com/tmux/tmux-builds/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}-linux-${TMUX_ARCH}.tar.gz -o /tmp/tmux.tar.gz",
+                    "curl -fsSL https://github.com/tmux/tmux-builds/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION#v}-linux-${TMUX_ARCH}.tar.gz -o /tmp/tmux.tar.gz",
                     "tar -xzf /tmp/tmux.tar.gz -C /tmp",
                     "mkdir -p ${HOME}/.local/bin",
                     "mv /tmp/tmux ${HOME}/.local/bin/tmux",
@@ -41,8 +42,9 @@
                 "type": "git",
                 "url": "https://github.com/junegunn/fzf.git",
                 "command": [
+                    "rm -rf ${HOME}/.fzf",
                     "git clone --depth 1 ${url} ${HOME}/.fzf",
-                    "${HOME}/.fzf/install"
+                    "${HOME}/.fzf/install --all"
                 ]
             }
         },
@@ -132,7 +134,7 @@
                 },
                 {
                     "type": "append",
-                    "source": "bash/.bashrc",
+                    "source": "bash/bashrc",
                     "target": "${HOME}/.bashrc",
                     "marker": "# dotfile - Start"
                 }
@@ -155,7 +157,7 @@
                 },
                 {
                     "type": "append",
-                    "source": "bash/.bashrc",
+                    "source": "bash/bashrc",
                     "target": "${HOME}/.bashrc",
                     "marker": "# dotfile - Start"
                 }

@@ -243,7 +243,7 @@ with open(json_path) as f:
 def clean(s):
     return str(s).replace('\r', '').replace('\n', ' ').strip()
 
-SEP = "\x1F"
+SEP = " && "
 
 tools = data.get("tools", [])
 
@@ -335,6 +335,7 @@ _install_tool() {
                 WARNINGS+=("${name}: skipped -- sudo privileges not available.")
                 return
             else
+                run "apt-get update -qq"
                 run "apt-get install -y '${pkg}'" || {
                     log_error "${name}: apt install failed."
                     WARNINGS+=("${name}: installation failed.")
@@ -373,13 +374,25 @@ _install_tool() {
             run "cargo install '${pkg}'"
             ;;
         git|archive)
-            IFS=$'\x1F' read -ra cmd_list <<< "$cmds"
-            for cmd in "${cmd_list[@]}"; do
-                [[ -z "$cmd" ]] && continue
-                cmd="${cmd//\$\{url\}/$url}"
-                cmd="${cmd//\$\{HOME\}/$HOME}"
+            set +e
+            local cmd="$cmds"
+            cmd="${cmd//\$\{url\}/$url}"
+            cmd="${cmd//\$\{HOME\}/$HOME}"
+
+            if ! $DRY_RUN; then
+                log_info "Running command: $cmd"
                 run "$cmd"
-            done
+                local exit_code=$?
+                if [[ $exit_code -ne 0 ]]; then
+                    log_error "${name}: command failed (exit code ${exit_code})"
+                    WARNINGS+=("${name}: installation failed.")
+                    set -e
+                    return
+                fi
+            else
+                run "$cmd"
+            fi
+            set -e
             ;;
         *)
             log_warn "Unknown install type '${type}' for tool '${name}', skipping."
@@ -524,13 +537,7 @@ print_summary() {
 # Main
 # ----------------------------------------------------------------------------
 main() {
-    if $IS_WINDOWS; then
-        log_section "Dotfile Installer (Windows / Git Bash)"
-    else
-        log_section "Dotfile Installer (Linux)"
-        log_info "Updating apt cache..."
-        run "sudo apt-get update -qq"
-    fi
+    log_section "Dotfile Installer"
 
     log_info "Dotfile dir : ${DOTFILE_DIR}"
     log_info "Backup dir  : ${BACKUP_DIR}"
