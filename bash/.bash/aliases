@@ -30,6 +30,8 @@ alias aar='sudo apt autoremove'
 alias au='sudo apt-get update'
 alias aug='sudo apt-get upgrade'
 
+alias cat='bat'
+
 alias vi='vim'
 alias vim='nvim'
 
@@ -112,7 +114,7 @@ gh() {
         --bind 'enter:execute(LESS="-c -+F -R $LESS"                      \
                               git log -p --stat -1 --pretty=newfull       \
                                       $(rg -o "[a-f0-9]{7,}" <<< {}))'    \
-        --preview 'grep -o "[a-f0-9]\{7,\}" <<< {}                        |
+        --preview 'rg -o "[a-f0-9]{7,}" <<< {}                            |
                    xargs git show --color=always --stat                   |
                    head -200'
 }
