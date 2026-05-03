@@ -8,7 +8,7 @@
     {
         "key": "ctrl+shift+e",
         "command": "workbench.files.action.focusFilesExplorer",
-        "when": "!sideBarVisible"
+        "when": "!explorerViewletVisible"
     },
     //Disable default implementation
     {
@@ -16,6 +16,12 @@
         "command": "vscode-neovim.send",
         "when": "editorTextFocus && neovim.init && neovim.mode != insert",
         "args": "<c-n>"
+    },
+    {
+        "key": "ctrl+p",
+        "command": "vscode-neovim.send",
+        "when": "editorTextFocus && neovim.init && neovim.mode != insert",
+        "args": "<c-p>"
     },
     // Move lines up and down
     {
@@ -95,7 +101,7 @@
     },
     // whichkey
     {
-        "key": "shift+space",
+        "key": "ctrl+shift+space",
         "command": "whichkey.show",
         "when": "!editorTextFocus"
     },
@@ -109,5 +115,10 @@
         "key": "ctrl+l",
         "command": "diffEditor.switchSide",
         "when": "editorTextFocus && neovim.init && neovim.mode != insert && isInDiffEditor && isInDiffLeftEditor"
+    },
+    // Remove conflicts keybindings
+    {
+        "key": "ctrl+j",
+        "command": "-workbench.action.togglePanel"
     }
 ]
