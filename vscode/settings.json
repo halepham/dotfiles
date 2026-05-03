@@ -170,9 +170,9 @@
                     "type": "bindings",
                     "bindings": [
                         { "key": "i", "name": "Toggle Inline View", "type": "command", "command": "toggle.diff.renderSideBySide" },
-                        { "key": "s", "name": "Stage Selected Ranges", "type": "command", "command": "git.diff.stageHunk" },
+                        { "key": "s", "name": "Stage Selected Ranges", "type": "command", "command": "git.stageSelectedRanges" },
                         { "key": "u", "name": "Unstage Selected Ranges", "type": "command", "command": "git.unstageSelectedRanges" },
-                        { "key": "r", "name": "Revert Selected Ranges", "type": "command", "command": "diffEditor.revert" },
+                        { "key": "r", "name": "Revert Selected Ranges", "type": "command", "command": "git.revertSelectedRanges" },
                         { "key": "S", "name": "Stage Current File", "type": "command", "command": "git.stage" },
                         { "key": "U", "name": "Unstage Current File", "type": "command", "command": "git.unstage" },
                         { "key": "R", "name": "Revert File Changes", "type": "command", "command": "git.clean" }
@@ -386,5 +386,5 @@
                 { "key": "b", "name": "Next Editor", "type": "command", "command": "workbench.action.nextEditorInGroup" }
             ]
         }
-    ]
+    ],
 }

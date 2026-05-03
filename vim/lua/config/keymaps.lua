@@ -644,7 +644,7 @@ if (postScrollCursorPosition !== null) {
 
     diff = {
       stage = function()
-        vscode.call("git.diff.stageHunk")
+        vscode.call("git.stageSelectedRanges")
       end,
 
       unstage = function()
@@ -652,7 +652,7 @@ if (postScrollCursorPosition !== null) {
       end,
 
       revert = function()
-        vscode.call("diffEditor.revert")
+        vscode.call("git.revertSelectedRanges")
       end,
 
       inlineView = function()
@@ -1175,9 +1175,9 @@ if (postScrollCursorPosition !== null) {
   -- git diff
   vim.keymap.set("n", "<leader>gd", git.diff.open, { desc = "Diff View" })
   vim.keymap.set("n", "<leader>ghi", git.diff.inlineView, { desc = "Toggle Inline View" })
-  vim.keymap.set("n", "<leader>ghs", git.diff.stage, { desc = "Stage Hunk" })
-  vim.keymap.set("n", "<leader>ghu", git.diff.unstage, { desc = "Unstage Hunk" })
-  vim.keymap.set("n", "<leader>ghr", git.diff.revert, { desc = "Revert Hunk" })
+  vim.keymap.set({ "n", "x" }, "<leader>ghs", git.diff.stage, { desc = "Stage Hunk" })
+  vim.keymap.set({ "n", "x" }, "<leader>ghu", git.diff.unstage, { desc = "Unstage Hunk" })
+  vim.keymap.set({ "n", "x" }, "<leader>ghr", git.diff.revert, { desc = "Revert Hunk" })
   vim.keymap.set("n", "<leader>ghS", git.stage, { desc = "Stage File" })
   vim.keymap.set("n", "<leader>ghU", git.unstage, { desc = "Unstage File" })
   vim.keymap.set("n", "<leader>ghR", git.clean, { desc = "Revert File" })
