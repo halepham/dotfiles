@@ -9,7 +9,11 @@ export GOBIN="$GOPATH/bin"
 export LOCAL_PATH=$HOME/.local
 export PATH=$LOCAL_PATH/usr/bin:$LOCAL_PATH/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
-export PATH=/usr/local/go/bin:$GOBIN:$PATH
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+    export PATH=$HOME/scoop/apps/gcc/current/bin:$PATH
+else
+    export PATH=/usr/local/go/bin:$GOBIN:$PATH
+fi
 
 ### FZF ###
 export FZF_DEFAULT_OPTS="                    \
