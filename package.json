@@ -98,6 +98,135 @@
                     "curl ${url} | bash"
                 ]
             }
+        },
+        {
+            "name": "clauded",
+            "windows": {
+                "type": "archive",
+                "url": "https://claude.ai/install.ps1",
+                "command": [
+                    "powershell -Command \"irm ${url} | iex\""
+                ]
+            },
+            "linux": {
+                "type": "archive",
+                "url": "https://claude.ai/install.sh",
+                "command": [
+                    "curl -fsSL ${url} | bash"
+                ]
+            }
+        },
+        {
+            "name": "CascadiaMono-NF-Mono",
+            "windows": {
+                "type": "scoop",
+                "bucket": "nerd-fonts",
+                "package": "CascadiaMono-NF-Mono"
+            }
+        },
+        {
+            "name": "draw.io",
+            "windows": {
+                "type": "scoop",
+                "bucket": "extras",
+                "package": "draw.io"
+            }
+        },
+        {
+            "name": "oracle-jdk",
+            "windows": {
+                "type": "scoop",
+                "bucket": "java",
+                "package": "oracle-jdk"
+            }
+        },
+        {
+            "name": "plantuml",
+            "windows": {
+                "type": "scoop",
+                "bucket": "extras",
+                "package": "plantuml"
+            }
+        },
+        {
+            "name": "oh-my-posh",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "oh-my-posh"
+            }
+        },
+        {
+            "name": "PSReadLine",
+            "windows": {
+                "type": "scoop",
+                "bucket": "extras",
+                "package": "PSReadLine"
+            }
+        },
+        {
+            "name": "Terminal-Icons",
+            "windows": {
+                "type": "scoop",
+                "bucket": "extras",
+                "package": "Terminal-Icons"
+            }
+        },
+        {
+            "name": "wt",
+            "windows": {
+                "type": "scoop",
+                "bucket": "extras",
+                "package": "windows-terminal"
+            }
+        },
+        {
+            "name": "powertoys",
+            "windows": {
+                "type": "scoop",
+                "bucket": "extras",
+                "package": "powertoys"
+            }
+        },
+        {
+            "name": "zip",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "zip"
+            }
+        },
+        {
+            "name": "cmake",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "cmake"
+            }
+        },
+        {
+            "name": "make",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "make"
+            }
+        },
+        {
+            "name": "gcc",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "gcc"
+            }
+        },
+        {
+            "name": "llvm",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "llvm"
+            }
         }
     ],
     "setup": [
