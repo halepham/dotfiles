@@ -1169,8 +1169,6 @@ if (postScrollCursorPosition !== null) {
   vim.keymap.set("n", "<leader>ge", git.scm, { desc = "Source Control" })
   vim.keymap.set("n", "<leader>gg", git.gitlens, { desc = "GitLens" })
   vim.keymap.set("n", "<leader>gl", git.log, { desc = "Log" })
-  vim.keymap.set("n", "<leader>gc", git.commit, { desc = "Commit" })
-  vim.keymap.set("n", "<leader>ga", git.amendCommit, { desc = "Amend Commit" })
   vim.keymap.set("n", "<leader>gb", git.blame, { desc = "Blame" })
   -- git diff
   vim.keymap.set("n", "<leader>gd", git.diff.open, { desc = "Diff View" })
@@ -1262,6 +1260,13 @@ if (postScrollCursorPosition !== null) {
   vim.keymap.set("n", "gI", go.implementation, { desc = "Goto Implementation" })
   vim.keymap.set("n", "gr", go.references, { desc = "Goto References" })
   vim.keymap.set("n", "gh", git.hunkPeekFocus, { desc = "Hunk Peek Focus" })
+
+  -- fold
+  vim.keymap.set("n", "za", fold.toggle, { desc = "Toggle Fold" })
+  vim.keymap.set("n", "zc", fold.close, { desc = "Close Fold" })
+  vim.keymap.set("n", "zM", fold.closeAll, { desc = "Close All Folds" })
+  vim.keymap.set("n", "zo", fold.open, { desc = "Open Fold" })
+  vim.keymap.set("n", "zR", fold.openAll, { desc = "Open All Folds" })
 
   -- Prev navigation [
   vim.keymap.set("n", "[h", nav.prevHunk)
