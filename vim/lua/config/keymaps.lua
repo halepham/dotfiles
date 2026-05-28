@@ -603,6 +603,14 @@ if (postScrollCursorPosition !== null) {
       vscode.call("workbench.action.files.newUntitledFile")
     end,
 
+    openFile = function()
+      vscode.call("workbench.action.files.openFile")
+    end,
+
+    openFolder = function()
+      vscode.call("workbench.action.files.openFolder")
+    end,
+
     find = function()
       vscode.call("workbench.action.quickOpen")
     end,
@@ -1159,6 +1167,8 @@ if (postScrollCursorPosition !== null) {
   vim.keymap.set("n", "<leader>fe", file.explorer, { desc = "Explorer" })
   vim.keymap.set("n", "<leader>fE", file.explorerFocus, { desc = "Focus Explorer" })
   vim.keymap.set("n", "<leader>fn", file.newFile, { desc = "New File" })
+  vim.keymap.set("n", "<leader>fo", file.openFile, { desc = "Open File" })
+  vim.keymap.set("n", "<leader>fO", file.openFolder, { desc = "Open Folder" })
   vim.keymap.set("n", "<leader>ff", file.find, { desc = "Find Files" })
   vim.keymap.set("n", "<leader>fp", file.projects, { desc = "Projects" })
   vim.keymap.set("n", "<leader>fr", file.recent, { desc = "Recent" })
@@ -1171,7 +1181,7 @@ if (postScrollCursorPosition !== null) {
   vim.keymap.set("n", "<leader>gl", git.log, { desc = "Log" })
   vim.keymap.set("n", "<leader>gb", git.blame, { desc = "Blame" })
   -- git diff
-  vim.keymap.set("n", "<leader>gd", git.diff.open, { desc = "Diff View" })
+  vim.keymap.set("n", "<leader>ghd", git.diff.open, { desc = "Diff View" })
   vim.keymap.set("n", "<leader>ghi", git.diff.inlineView, { desc = "Toggle Inline View" })
   vim.keymap.set({ "n", "x" }, "<leader>ghs", git.diff.stage, { desc = "Stage Hunk" })
   vim.keymap.set({ "n", "x" }, "<leader>ghu", git.diff.unstage, { desc = "Unstage Hunk" })

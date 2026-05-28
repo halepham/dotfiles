@@ -2,6 +2,7 @@
     "whichkey.bindings": [
         // quick keymaps
         { "key": "e", "name": "Explorer", "type": "command", "command": "workbench.action.toggleSidebarVisibility" },
+        { "key": "E", "name": "Focus Explorer", "type": "command", "command": "workbench.files.action.focusFilesExplorer" },
         { "key": "`", "name": "Switch Editor (Recently Used)", "type": "command", "commands": [
                 "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup",
                 "list.select"
@@ -143,6 +144,8 @@
             "bindings": [
                 { "key": "e", "name": "Toggle Explorer", "type": "command", "command": "workbench.action.toggleSidebarVisibility" },
                 { "key": "n", "name": "New File", "type": "command", "command": "workbench.action.files.newUntitledFile" },
+                { "key": "o", "name": "Open File", "type": "command", "command": "workbench.action.files.openFile" },
+                { "key": "O", "name": "Open Folder", "type": "command", "command": "workbench.action.files.openFolder" },
                 { "key": "f", "name": "Find Files", "type": "command", "command": "workbench.action.quickOpen" },
                 { "key": "p", "name": "Projects", "type": "command", "command": "projectManager.listProjects" },
                 { "key": "r", "name": "Recent", "type": "command", "command": "workbench.action.openRecent" },
@@ -163,12 +166,12 @@
                 { "key": "a", "name": "Amend Last Commit", "type": "command", "command": "git.commitAmend" },
                 { "key": "b", "name": "Toggle Blame", "type": "command", "command": "gitlens.toggleFileBlame:editor" },
                 // diff
-                { "key": "d", "name": "Diff View", "type": "command", "command": "git.openChange" },
                 {
                     "key": "h",
-                    "name": "+Diff/Hunk...",
+                    "name": "+Hunk (Editor)...",
                     "type": "bindings",
                     "bindings": [
+                        { "key": "d", "name": "Diff View", "type": "command", "command": "git.openChange" },
                         { "key": "i", "name": "Toggle Inline View", "type": "command", "command": "toggle.diff.renderSideBySide" },
                         { "key": "s", "name": "Stage Selected Ranges", "type": "command", "command": "git.stageSelectedRanges" },
                         { "key": "u", "name": "Unstage Selected Ranges", "type": "command", "command": "git.unstageSelectedRanges" },
