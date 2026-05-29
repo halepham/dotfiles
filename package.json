@@ -100,7 +100,7 @@
             }
         },
         {
-            "name": "clauded",
+            "name": "claude",
             "windows": {
                 "type": "archive",
                 "url": "https://claude.ai/install.ps1",
@@ -133,11 +133,11 @@
             }
         },
         {
-            "name": "oracle-jdk",
+            "name": "oraclejdk",
             "windows": {
                 "type": "scoop",
                 "bucket": "java",
-                "package": "oracle-jdk"
+                "package": "oraclejdk"
             }
         },
         {
