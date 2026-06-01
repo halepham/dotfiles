@@ -141,6 +141,27 @@
             }
         },
         {
+            "name": "node",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "nodejs-lts"
+            },
+            "linux": {
+                "type": "archive",
+                "url": "https://nodejs.org/dist/index.json",
+                "command": [
+                    "NODE_VERSION=$(curl -fsSL ${url} | python3 -c \"import sys,json; print(next(r['version'] for r in json.load(sys.stdin) if r['lts']))\")",
+                    "NODE_ARCH=$(uname -m | sed 's/x86_64/x64/;s/aarch64/arm64/')",
+                    "curl -fsSL https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz -o /tmp/node.tar.xz",
+                    "tar -xJf /tmp/node.tar.xz -C /tmp",
+                    "mkdir -p ${HOME}/.local",
+                    "cp -r /tmp/node-${NODE_VERSION}-linux-${NODE_ARCH}/* ${HOME}/.local/",
+                    "rm -rf /tmp/node.tar.xz /tmp/node-${NODE_VERSION}-linux-${NODE_ARCH}"
+                ]
+            }
+        },
+        {
             "name": "plantuml",
             "windows": {
                 "type": "scoop",
@@ -226,6 +247,17 @@
                 "type": "scoop",
                 "bucket": "main",
                 "package": "llvm"
+            },
+            "linux": {
+                "type": "archive",
+                "url": "https://api.github.com/repos/llvm/llvm-project/releases/latest",
+                "command": [
+                    "LLVM_URL=$(curl -fsSL ${url} | python3 -c \"import sys,json; d=json.load(sys.stdin); print(next(a['browser_download_url'] for a in d['assets'] if a['name'].endswith('.tar.xz') and ('Linux-X64' in a['name'] or 'x86_64-linux' in a['name'])))\")",
+                    "curl -fsSL ${LLVM_URL} -o /tmp/llvm.tar.xz",
+                    "mkdir -p ${HOME}/.local",
+                    "tar -xJf /tmp/llvm.tar.xz -C ${HOME}/.local --strip-components=1",
+                    "rm -f /tmp/llvm.tar.xz"
+                ]
             }
         }
     ],
