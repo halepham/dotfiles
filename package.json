@@ -133,7 +133,7 @@
             }
         },
         {
-            "name": "oraclejdk",
+            "name": "javac",
             "windows": {
                 "type": "scoop",
                 "bucket": "java",
@@ -242,7 +242,7 @@
             }
         },
         {
-            "name": "llvm",
+            "name": "clang",
             "windows": {
                 "type": "scoop",
                 "bucket": "main",
