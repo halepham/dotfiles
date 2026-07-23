@@ -259,6 +259,23 @@
                     "rm -f /tmp/llvm.tar.xz"
                 ]
             }
+        },
+        {
+            "name": "uv",
+            "windows": {
+                "type": "archive",
+                "url": "https://astral.sh/uv/install.ps1",
+                "command": [
+                    "powershell -ExecutionPolicy ByPass -c \"irm ${url} | iex\""
+                ]
+            },
+            "linux": {
+                "type": "archive",
+                "url": "https://astral.sh/uv/install.sh",
+                "command": [
+                    "curl -LsSf ${url} | sh"
+                ]
+            }
         }
     ],
     "setup": [
