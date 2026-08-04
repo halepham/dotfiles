@@ -1,3 +1,5 @@
 backup/
 example/
 vim/lazy-lock.json
+claude/*
+!claude/settings.json

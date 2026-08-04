@@ -1,0 +1,17 @@
+{
+  "model": "sonnet",
+  "enabledPlugins": {
+    "handoff@handoff-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "handoff-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "willseltzer/claude-handoff"
+      }
+    }
+  },
+  "effortLevel": "medium",
+  "theme": "dark",
+  "editorMode": "vim"
+}

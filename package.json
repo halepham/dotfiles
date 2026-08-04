@@ -376,6 +376,16 @@
                     "target": "${NVIM_CONFIG_DIR}"
                 }
             ]
+        },
+        {
+            "name": "claude",
+            "any": [
+                {
+                    "type": "link",
+                    "source": "claude",
+                    "target": "${HOME}/.claude"
+                }
+            ]
         }
     ]
 }
