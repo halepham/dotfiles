@@ -26,6 +26,7 @@ Before drafting or revising content:
 ## Core prose style
 
 - Use International English.
+- Write all documentation, comments, commit messages, pull request descriptions, and changelog entries in English, regardless of the language used in the conversation or request. Do not switch to the conversation's language, for example Vietnamese, for these deliverables.
 - Prefer active voice and present tense.
 - Use second person or imperative mood for instructions.
 - Put the main idea at the start of each sentence.
@@ -167,9 +168,17 @@ Use the exact capitalization and spelling shown in the user interface or source 
 - Use a colon only to introduce a list, non-numbered example, or complex equation, or within required syntax such as `[7:0]`.
 - Do not use a colon after `such as`, `including`, or a linking verb.
 - Use a hyphen for numeric ranges, not an en dash.
-- Use an em dash for reserved fields and blank cells in register tables.
+- Do not use an em dash (`—`). Replace it with a comma, colon, semicolon, parentheses, or a separate sentence, depending on which relationship the surrounding text expresses. Use a hyphen (`-`) for reserved fields and blank cells in register tables.
 - Do not use quotation marks for emphasis.
 - Do not use bold, italics, underlining, or capitalization for emphasis.
+- Use plain ASCII characters. Do not use emoji, decorative symbols, or pictographic icons in prose, headings, tables, comments, commit messages, or pull request descriptions.
+- Use straight quotation marks (`"` and `'`), not curly or smart quotes (`“ ” ‘ ’`).
+- Write three periods (`...`) for an ellipsis. Do not use the ellipsis character (`…`).
+- Use a regular space. Do not use a non-breaking space or other non-ASCII whitespace character, except where this skill requires one between a number and a unit and the output format supports it.
+- Use the standard Markdown list marker (`-` or a number) for lists. Do not use decorative bullet glyphs (`•`, `●`, `▪`, `»`) in prose.
+- Do not use arrow glyphs (`→`, `⇒`, `↔`) in prose. Write `to` or restructure the sentence. Arrows remain allowed inside a figure or diagram where they convey a flow or connection.
+- Do not use symbol shorthand such as `✓`, `✗`, `★`, or `⚠` to indicate status or severity. Use a word such as `Pass`, `Fail`, `Yes`, `No`, `Warning`, or `Note`.
+- An approved standard unit or mathematical symbol required for technical accuracy, such as `µ`, `Ω`, `°`, `×`, or `±`, remains allowed when no ASCII substitute preserves the technical meaning and the output format supports it.
 
 ## Cross-references
 
@@ -192,7 +201,7 @@ For every table:
 - Reference it from preceding text.
 - Include column headings.
 - Left-align the table and its entries unless a required format specifies otherwise.
-- Do not leave cells empty. Use an em dash.
+- Do not leave cells empty. Use a hyphen (`-`), not an em dash.
 - Do not mix complete sentences and fragments in the same cell.
 - End table-cell text with a period only when it contains one or more complete sentences.
 - Use a table note for information that applies to the whole table.

@@ -28,6 +28,7 @@ If a product-specific documentation style guide, business-unit requirement, or r
 
 - Prioritize clarity, conciseness, accuracy, consistency, and maintainability.
 - Use International English. For example, use `initialize`, `color`, and `behavior`.
+- Write all documentation, code comments, commit messages, pull request descriptions, and changelog entries in English, regardless of the language used in the conversation or request. Do not switch to the conversation's language, for example Vietnamese, for these deliverables.
 - Prefer present tense and active voice.
 - Use passive voice only when the agent is unknown, irrelevant, sensitive, or when describing device behavior that the reader cannot control.
 - Write instructions in second person or imperative form. Start each procedural step with an action verb.
@@ -37,6 +38,15 @@ If a product-specific documentation style guide, business-unit requirement, or r
 - Prefer `because` over `since` when stating a cause.
 - Avoid temporal terms such as `currently`, `now`, `latest`, and `previous version`. State the applicable version, behavior, or condition directly.
 - Do not use bold, italics, quotation marks, capitalization, or underlining only for emphasis.
+- Do not use an em dash (`—`). Replace it with a comma, colon, semicolon, parentheses, or a separate sentence, depending on which relationship the surrounding text expresses.
+- Use plain ASCII characters. Do not use emoji, decorative symbols, or pictographic icons in prose, headings, tables, code comments, commit messages, or pull request descriptions.
+- Use straight quotation marks (`"` and `'`), not curly or smart quotes (`“ ” ‘ ’`).
+- Write three periods (`...`) for an ellipsis. Do not use the ellipsis character (`…`).
+- Use a regular space. Do not use a non-breaking space or other non-ASCII whitespace character, except where required between a number and a unit and the output format supports it.
+- Do not use decorative bullet glyphs (`•`, `●`, `▪`, `»`) in prose. Use the standard Markdown list marker (`-` or a number).
+- Do not use arrow glyphs (`→`, `⇒`, `↔`) in prose. Write `to` or restructure the sentence. Arrows remain allowed inside a figure or diagram where they convey a flow or connection.
+- Do not use symbol shorthand such as `✓`, `✗`, `★`, or `⚠` to indicate status or severity. Use a word such as `Pass`, `Fail`, `Yes`, `No`, `Warning`, or `Note`.
+- An approved standard unit or mathematical symbol required for technical accuracy, such as `µ`, `Ω`, `°`, `×`, or `±`, remains allowed when no ASCII substitute preserves the technical meaning and the output format supports it.
 
 ## Acronyms and abbreviations
 
@@ -79,7 +89,7 @@ If a product-specific documentation style guide, business-unit requirement, or r
 
 - Use sentence case for figure titles, table titles, and table column headings.
 - Refer to every figure and table from preceding text.
-- Do not leave a table cell empty. Use an em dash where a blank value must be shown.
+- Do not leave a table cell empty. Use a hyphen (`-`), not an em dash, where a blank value must be shown.
 - Use `TBD` for unresolved author notes. Remove all TBDs before release.
 - Repeat a small amount of information instead of adding an unnecessary cross-reference.
 - Do not use excessive, circular, temporary, or difficult-to-maintain cross-references.
