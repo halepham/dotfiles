@@ -12,6 +12,7 @@
     }
   },
   "effortLevel": "medium",
+  "tui": "fullscreen",
   "theme": "dark",
   "editorMode": "vim"
 }
