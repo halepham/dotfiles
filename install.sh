@@ -10,6 +10,19 @@ BACKUP_DIR="${DOTFILE_DIR}/backup"
 SKIP_GITCONFIG=false
 WARNINGS=()
 FAILED_TOOLS=()
+INSTALLED_TOOLS=()
+UPDATED_TOOLS=()
+SKIPPED_TOOLS=()
+
+# Update mode: upgrade tools that are already installed instead of skipping them
+UPDATE_MODE=false
+
+# Which phases to run
+RUN_TOOLS=true
+RUN_SETUP=true
+
+# Restrict work to these tool names (empty = all tools)
+ONLY_TOOLS=()
 
 # Detect OS
 IS_WINDOWS=false
@@ -57,6 +70,55 @@ log_section() {
     echo -e "\n${CYAN}======================================${NC}"
     echo -e "${CYAN}  $*${NC}"
     echo -e "${CYAN}======================================${NC}"
+}
+
+# ----------------------------------------------------------------------------
+# Usage / argument parsing
+# ----------------------------------------------------------------------------
+usage() {
+    cat <<EOF
+Usage: $(basename "${BASH_SOURCE[0]}") [options]
+
+Options:
+  -u, --update        Update tools that are already installed (default: skip them)
+  -n, --dry-run       Print commands instead of executing them
+  -t, --tools-only    Only install/update tools, skip dotfile setup
+  -s, --setup-only    Only run dotfile setup, skip tools
+  -o, --only NAME     Limit to the given tool (repeatable, e.g. -o nvim -o tmux)
+  -h, --help          Show this help and exit
+
+Examples:
+  ./install.sh                  # install missing tools + link dotfiles
+  ./install.sh --update         # also upgrade tools already installed
+  ./install.sh -u -o nvim       # upgrade only nvim
+  ./install.sh -u -n            # preview what an update would do
+EOF
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -u|--update)     UPDATE_MODE=true ;;
+            -n|--dry-run)    DRY_RUN=true ;;
+            -t|--tools-only) RUN_SETUP=false ;;
+            -s|--setup-only) RUN_TOOLS=false ;;
+            -o|--only)
+                if [[ -z "${2:-}" ]]; then
+                    log_error "--only requires a tool name"
+                    exit 1
+                fi
+                ONLY_TOOLS+=("$2")
+                shift
+                ;;
+            -h|--help)       usage; exit 0 ;;
+            *)
+                log_error "Unknown option: $1"
+                usage
+                exit 1
+                ;;
+        esac
+        shift
+    done
 }
 
 # ----------------------------------------------------------------------------
@@ -216,7 +278,11 @@ make_append() {
 # Parse package.json [3] and run install actions
 # ----------------------------------------------------------------------------
 install_tools() {
-    log_section "Install Tools"
+    if $UPDATE_MODE; then
+        log_section "Install / Update Tools"
+    else
+        log_section "Install Tools"
+    fi
 
     local json_file="${DOTFILE_DIR}/package.json"
     if [[ ! -f "$json_file" ]]; then
@@ -265,7 +331,9 @@ EOF
 
     while IFS='|' read -r name type pkg url bucket cmds; do
         [[ -z "$name" ]] && continue
-        log_info "Installing ${name}"
+        if ! _is_selected "$name"; then
+            continue
+        fi
         _install_tool "$name" "$type" "$pkg" "$url" "$bucket" "$cmds"
     done <<< "$tools"
 }
@@ -278,45 +346,38 @@ _install_tool() {
     local bucket="$5"
     local cmds="$6"
 
-    # Skip if already installed
-    if has "$name"; then
+    local installed=false
+    has "$name" && installed=true
+
+    # Already installed and we are not in update mode -> nothing to do
+    if $installed && ! $UPDATE_MODE; then
         log_info "${name} already installed, skipping."
+        SKIPPED_TOOLS+=("$name")
         return
     fi
 
     # Special case: lazydocker requires docker to be present
     if [[ "$name" == "lazydocker" ]] && ! has docker; then
         log_info "Docker not found, skipping lazydocker."
+        SKIPPED_TOOLS+=("$name")
         return
+    fi
+
+    # install = not present yet, update = present and UPDATE_MODE is on
+    local action="install"
+    $installed && action="update"
+
+    if [[ "$action" == "update" ]]; then
+        log_info "Updating ${name}"
+    else
+        log_info "Installing ${name}"
     fi
 
     case "$type" in
         scoop)
-            # Skip if scoop itself failed
-            if _is_failed "scoop"; then
-                log_warn "${name}: skipping -- scoop failed to install."
-                WARNINGS+=("${name}: scoop installation failed.")
-                return
-            fi
+            _ensure_scoop "$name" || return
 
-            if ! has scoop; then
-                log_info "scoop not found, installing scoop..."
-                run "powershell -Command \"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser\""
-                run "powershell -Command \"Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression\""
-
-                # Reload PATH after scoop install
-                if ! $DRY_RUN; then
-                    export PATH="${HOME}/scoop/shims:${PATH}"
-                    if ! has scoop; then
-                        log_error "scoop installation failed."
-                        WARNINGS+=("${name}: scoop installation failed. Please install manually: https://scoop.sh")
-                        FAILED_TOOLS+=("scoop")
-                        return
-                    fi
-                fi
-            fi
-
-            # Update scoop before installing
+            # Refresh scoop and its buckets before install/update
             run "scoop update"
 
             # Add bucket if specified and not already added
@@ -326,7 +387,19 @@ _install_tool() {
                 fi
             fi
 
-            run "scoop install '${pkg}'"
+            if [[ "$action" == "update" ]]; then
+                run "scoop update '${pkg}'" || {
+                    log_error "${name}: scoop update failed."
+                    WARNINGS+=("${name}: update failed.")
+                    return
+                }
+            else
+                run "scoop install '${pkg}'" || {
+                    log_error "${name}: scoop install failed."
+                    WARNINGS+=("${name}: installation failed.")
+                    return
+                }
+            fi
             ;;
         apt)
             # Check if sudo is available before running apt
@@ -334,44 +407,31 @@ _install_tool() {
                 log_warn "${name}: sudo privileges required for apt. Skipping."
                 WARNINGS+=("${name}: skipped -- sudo privileges not available.")
                 return
-            else
-                run "apt-get update -qq"
-                run "apt-get install -y '${pkg}'" || {
-                    log_error "${name}: apt install failed."
-                    WARNINGS+=("${name}: installation failed.")
-                    return
-                }
             fi
+
+            run "sudo apt-get update -qq"
+
+            local apt_flags="-y"
+            [[ "$action" == "update" ]] && apt_flags="-y --only-upgrade"
+
+            run "sudo apt-get install ${apt_flags} '${pkg}'" || {
+                log_error "${name}: apt ${action} failed."
+                WARNINGS+=("${name}: ${action} failed.")
+                return
+            }
             ;;
         cargo)
-            # Skip if cargo itself previously failed
-            if _is_failed "rust"; then
-                log_warn "${name}: skipping -- Rust installation previously failed."
-                WARNINGS+=("${name}: skipped -- Rust installation failed.")
+            _ensure_cargo "$name" || return
+
+            # cargo install refuses to overwrite an existing binary without --force
+            local cargo_flags=""
+            [[ "$action" == "update" ]] && cargo_flags="--force"
+
+            run "cargo install ${cargo_flags} '${pkg}'" || {
+                log_error "${name}: cargo ${action} failed."
+                WARNINGS+=("${name}: ${action} failed.")
                 return
-            fi
-
-            if ! has cargo; then
-                log_info "Installing Rust (required for ${name})..."
-                run "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
-
-                # Reload cargo env after install
-                if ! $DRY_RUN; then
-                    # shellcheck source=/dev/null
-                    if [[ -f "${HOME}/.cargo/env" ]]; then
-                        source "${HOME}/.cargo/env"
-                    fi
-
-                    # If cargo still not available after install, skip
-                    if ! has cargo; then
-                        log_warn "${name}: Rust installation failed, skipping."
-                        WARNINGS+=("${name}: skipped -- Rust installation failed.")
-                        FAILED_TOOLS+=("rust")
-                        return
-                    fi
-                fi
-            fi
-            run "cargo install '${pkg}'"
+            }
             ;;
         git|archive)
             set +e
@@ -385,7 +445,7 @@ _install_tool() {
                 local exit_code=$?
                 if [[ $exit_code -ne 0 ]]; then
                     log_error "${name}: command failed (exit code ${exit_code})"
-                    WARNINGS+=("${name}: installation failed.")
+                    WARNINGS+=("${name}: ${action} failed.")
                     set -e
                     return
                 fi
@@ -396,10 +456,105 @@ _install_tool() {
             ;;
         *)
             log_warn "Unknown install type '${type}' for tool '${name}', skipping."
+            SKIPPED_TOOLS+=("$name")
+            return
             ;;
     esac
 
-    log_success "${name} installed"
+    if [[ "$action" == "update" ]]; then
+        UPDATED_TOOLS+=("$name")
+        log_success "${name} updated"
+    else
+        INSTALLED_TOOLS+=("$name")
+        log_success "${name} installed"
+    fi
+}
+
+# ----------------------------------------------------------------------------
+# Make sure scoop is available (Windows package manager).
+# Returns non-zero if it cannot be used.
+# ----------------------------------------------------------------------------
+_ensure_scoop() {
+    local name="$1"
+
+    # Skip if scoop itself failed earlier in this run
+    if _is_failed "scoop"; then
+        log_warn "${name}: skipping -- scoop failed to install."
+        WARNINGS+=("${name}: scoop installation failed.")
+        return 1
+    fi
+
+    if has scoop; then
+        return 0
+    fi
+
+    log_info "scoop not found, installing scoop..."
+    run "powershell -Command \"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser\""
+    run "powershell -Command \"Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression\""
+
+    # Reload PATH after scoop install
+    if ! $DRY_RUN; then
+        export PATH="${HOME}/scoop/shims:${PATH}"
+        if ! has scoop; then
+            log_error "scoop installation failed."
+            WARNINGS+=("${name}: scoop installation failed. Please install manually: https://scoop.sh")
+            FAILED_TOOLS+=("scoop")
+            return 1
+        fi
+    fi
+    return 0
+}
+
+# ----------------------------------------------------------------------------
+# Make sure cargo is available (installs Rust via rustup if needed).
+# Returns non-zero if it cannot be used.
+# ----------------------------------------------------------------------------
+_ensure_cargo() {
+    local name="$1"
+
+    # Skip if cargo itself previously failed
+    if _is_failed "rust"; then
+        log_warn "${name}: skipping -- Rust installation previously failed."
+        WARNINGS+=("${name}: skipped -- Rust installation failed.")
+        return 1
+    fi
+
+    if has cargo; then
+        return 0
+    fi
+
+    log_info "Installing Rust (required for ${name})..."
+    run "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+
+    # Reload cargo env after install
+    if ! $DRY_RUN; then
+        # shellcheck source=/dev/null
+        if [[ -f "${HOME}/.cargo/env" ]]; then
+            source "${HOME}/.cargo/env"
+        fi
+
+        # If cargo still not available after install, skip
+        if ! has cargo; then
+            log_warn "${name}: Rust installation failed, skipping."
+            WARNINGS+=("${name}: skipped -- Rust installation failed.")
+            FAILED_TOOLS+=("rust")
+            return 1
+        fi
+    fi
+    return 0
+}
+
+# ----------------------------------------------------------------------------
+# Check whether a tool was selected with --only (no --only = everything)
+# ----------------------------------------------------------------------------
+_is_selected() {
+    local name="$1"
+    [[ ${#ONLY_TOOLS[@]} -eq 0 ]] && return 0
+    local want
+    for want in "${ONLY_TOOLS[@]}"; do
+        [[ "$want" == "$name" ]] && return 0
+    done
+    return 1
 }
 
 # ----------------------------------------------------------------------------
@@ -407,6 +562,8 @@ _install_tool() {
 # ----------------------------------------------------------------------------
 _is_failed() {
     local name="$1"
+    [[ ${#FAILED_TOOLS[@]} -eq 0 ]] && return 1
+    local failed
     for failed in "${FAILED_TOOLS[@]}"; do
         [[ "$failed" == "$name" ]] && return 0
     done
@@ -512,7 +669,20 @@ print_summary() {
 
     if $DRY_RUN; then
         echo -e "${BLUE}[DRY-RUN] Dry-run mode is ON. No commands were actually executed.${NC}"
-        echo -e "${BLUE}[DRY-RUN] Set DRY_RUN=false in the script to apply changes.${NC}"
+        echo -e "${BLUE}[DRY-RUN] Re-run without --dry-run to apply changes.${NC}"
+    fi
+
+    if [[ ${#INSTALLED_TOOLS[@]} -gt 0 ]]; then
+        echo -e "\n${GREEN}Installed (${#INSTALLED_TOOLS[@]}):${NC} ${INSTALLED_TOOLS[*]}"
+    fi
+    if [[ ${#UPDATED_TOOLS[@]} -gt 0 ]]; then
+        echo -e "${GREEN}Updated (${#UPDATED_TOOLS[@]}):${NC} ${UPDATED_TOOLS[*]}"
+    fi
+    if [[ ${#SKIPPED_TOOLS[@]} -gt 0 ]]; then
+        echo -e "${BLUE}Skipped (${#SKIPPED_TOOLS[@]}):${NC} ${SKIPPED_TOOLS[*]}"
+        if ! $UPDATE_MODE; then
+            echo -e "${BLUE}Hint:${NC} re-run with --update to upgrade the tools above."
+        fi
     fi
 
     if [[ ${#WARNINGS[@]} -gt 0 ]]; then
@@ -537,15 +707,29 @@ print_summary() {
 # Main
 # ----------------------------------------------------------------------------
 main() {
+    parse_args "$@"
+
     log_section "Dotfile Installer"
 
     log_info "Dotfile dir : ${DOTFILE_DIR}"
     log_info "Backup dir  : ${BACKUP_DIR}"
     log_info "OS          : $(uname -s)"
     log_info "Dry-run     : ${DRY_RUN}"
+    if $UPDATE_MODE; then
+        log_info "Mode        : install + update"
+    else
+        log_info "Mode        : install only (use --update to upgrade existing tools)"
+    fi
+    if [[ ${#ONLY_TOOLS[@]} -gt 0 ]]; then
+        log_info "Only        : ${ONLY_TOOLS[*]}"
+    fi
 
-    install_tools
-    setup_dotfiles
+    if $RUN_TOOLS; then
+        install_tools
+    fi
+    if $RUN_SETUP; then
+        setup_dotfiles
+    fi
     print_summary
 }
 
