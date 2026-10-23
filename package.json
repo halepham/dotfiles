@@ -276,6 +276,21 @@
                     "curl -LsSf ${url} | sh"
                 ]
             }
+        },
+        {
+            "name": "jf",
+            "windows": {
+                "type": "scoop",
+                "bucket": "main",
+                "package": "jfrog"
+            },
+            "linux": {
+                "type": "archive",
+                "url": "https://install-cli.jfrog.io",
+                "command": [
+                    "curl -fL ${url} | sh"
+                ]
+            }
         }
     ],
     "setup": [
