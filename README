@@ -1,1 +1,111 @@
-My dotfiles
+# Dotfiles
+
+This repository contains configuration files for Bash, tmux, Neovim, PowerShell, Claude Code, and other tools. The `install.sh` script installs the required tools and links or copies the configuration files into the home directory. The script runs on Linux and on Windows (Git Bash).
+
+## Requirements
+
+The `install.sh` script requires the following programs:
+
+- Bash
+- Python 3, to parse `package.json`
+- `curl` and `git`, to download tools
+- `sudo` privileges, only for tools of type `apt`
+
+## Installation
+
+To install the tools and set up the dotfiles:
+
+1. Clone the repository into the home directory.
+2. Go to the repository directory.
+3. Run `./install.sh`. The script installs each missing tool, skips each tool that is already installed, and sets up the configuration files.
+4. Reload the shell. On Linux, run `source ~/.bashrc`. On Windows, restart Git Bash and PowerShell.
+
+Before the script replaces an existing file, it moves the file to the `backup` directory with a timestamp suffix.
+
+## Command-Line Options
+
+| Option | Description |
+|---|---|
+| `-u`, `--update` | Update the tools that are already installed. Without this option, the script skips them. |
+| `-n`, `--dry-run` | Print the commands without running them. |
+| `-t`, `--tools-only` | Install or update tools only. Skip the dotfile setup. |
+| `-s`, `--setup-only` | Set up the dotfiles only. Skip the tools. |
+| `-o`, `--only NAME` | Limit the run to the tool `NAME`. Repeat the option to select more than one tool. |
+| `-h`, `--help` | Show the help text and exit. |
+
+For example:
+
+```bash
+./install.sh                  # Install missing tools and set up the dotfiles
+./install.sh --update         # Also update the tools that are already installed
+./install.sh -u -o nvim       # Update only nvim
+./install.sh -u -n            # Show the commands that an update runs
+```
+
+## Configuration File
+
+The `package.json` file defines the tools to install and the configuration files to set up. It has two arrays: `tools` and `setup`.
+
+### Tools
+
+Each entry in `tools` has a `name` and one block per platform: `linux`, `windows`, or `any`. The script uses the block for the current platform. If that block does not exist, the script uses the `any` block.
+
+The script treats a tool as installed when a command with the same name as `name` is in `PATH`.
+
+The `type` field selects the installation method:
+
+| Type | Fields | Install action | Update action |
+|---|---|---|---|
+| `scoop` | `package`, `bucket` | `scoop install` | `scoop update` |
+| `apt` | `package` | `apt-get install` | `apt-get install --only-upgrade` |
+| `cargo` | `package` | `cargo install` | `cargo install --force` |
+| `git`, `archive` | `url`, `command`, `update` | Run `command` | Run `update`, or run `command` if `update` is not defined |
+
+For the `git` and `archive` types, the script joins the commands in each array with `&&` and stops at the first command that fails. The script replaces `${url}` with the value of the `url` field and `${HOME}` with the home directory. Other shell variables are expanded when the command runs.
+
+For example, this entry clones fzf on installation and pulls the repository on update:
+
+```json
+{
+    "name": "fzf",
+    "any": {
+        "type": "git",
+        "url": "https://github.com/junegunn/fzf.git",
+        "command": [
+            "git clone --depth 1 ${url} ${HOME}/.fzf",
+            "${HOME}/.fzf/install --all"
+        ],
+        "update": [
+            "git -C ${HOME}/.fzf pull",
+            "${HOME}/.fzf/install"
+        ]
+    }
+}
+```
+
+### Setup
+
+Each entry in `setup` has a `name` and a list of actions for each platform. Each action has a `type`, a `source` relative to the repository, and a `target`:
+
+| Type | Description |
+|---|---|
+| `link` | Create a symbolic link from `target` to `source`. On Windows, the script creates a junction for a directory. |
+| `copy` | Copy `source` to `target`. If `override` is `false` and `target` exists, the script skips the action. |
+| `append` | Append `source` to `target` if `target` does not contain the `marker` text. |
+
+The `target` field supports the `${HOME}`, `${NVIM_CONFIG_DIR}`, and `${POWERSHELL_PROFILE}` variables.
+
+If `~/.gitconfig` exists as a regular file, the script does not replace it. Merge the changes manually.
+
+## Directory Structure
+
+| Directory | Content |
+|---|---|
+| `bash` | Bash configuration, `.inputrc`, `.lscolor`, and `.gitconfig` |
+| `claude` | Claude Code settings, rules, and skills |
+| `powershell` | PowerShell profile and Oh My Posh theme |
+| `ssh` | Example of SSH client configuration |
+| `tmux` | tmux configuration |
+| `vim` | Neovim configuration based on LazyVim |
+| `vscode` | Visual Studio Code settings based on LazyVim |
+| `windows-terminal` | Windows Terminal settings |
