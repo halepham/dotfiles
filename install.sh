@@ -324,17 +324,20 @@ for tool in tools:
     url    = config.get("url", "")
     bucket = config.get("bucket", "")
     cmds   = config.get("command", [])
+    upds   = config.get("update", [])
 
-    print(f"{clean(name)}|{clean(t)}|{clean(pkg)}|{clean(url)}|{clean(bucket)}|{SEP.join(clean(c) for c in cmds)}")
+    # Fields are separated by \x1f (unit separator) because commands may contain '|'
+    fields = [name, t, pkg, url, bucket, SEP.join(clean(c) for c in cmds), SEP.join(clean(c) for c in upds)]
+    print("\x1f".join(clean(f) for f in fields))
 EOF
 )"
 
-    while IFS='|' read -r name type pkg url bucket cmds; do
+    while IFS=$'\x1f' read -r name type pkg url bucket cmds update_cmds; do
         [[ -z "$name" ]] && continue
         if ! _is_selected "$name"; then
             continue
         fi
-        _install_tool "$name" "$type" "$pkg" "$url" "$bucket" "$cmds"
+        _install_tool "$name" "$type" "$pkg" "$url" "$bucket" "$cmds" "$update_cmds"
     done <<< "$tools"
 }
 
@@ -345,6 +348,7 @@ _install_tool() {
     local url="$4"
     local bucket="$5"
     local cmds="$6"
+    local update_cmds="${7:-}"
 
     local installed=false
     has "$name" && installed=true
@@ -435,7 +439,11 @@ _install_tool() {
             ;;
         git|archive)
             set +e
+            # Use the "update" commands when updating, if provided; otherwise re-run "command"
             local cmd="$cmds"
+            if [[ "$action" == "update" && -n "$update_cmds" ]]; then
+                cmd="$update_cmds"
+            fi
             cmd="${cmd//\$\{url\}/$url}"
             cmd="${cmd//\$\{HOME\}/$HOME}"
 
