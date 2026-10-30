@@ -48,7 +48,7 @@
                 ],
                 "update": [
                     "git -C ${HOME}/.fzf pull",
-                    "${HOME}/.fzf/install"
+                    "${HOME}/.fzf/install --all"
                 ]
             }
         },

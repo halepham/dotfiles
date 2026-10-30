@@ -61,7 +61,7 @@ The `type` field selects the installation method:
 | `cargo` | `package` | `cargo install` | `cargo install --force` |
 | `git`, `archive` | `url`, `command`, `update` | Run `command` | Run `update`, or run `command` if `update` is not defined |
 
-For the `git` and `archive` types, the script joins the commands in each array with `&&` and stops at the first command that fails. The script replaces `${url}` with the value of the `url` field and `${HOME}` with the home directory. Other shell variables are expanded when the command runs.
+For the `git` and `archive` types, the script runs the commands in each array one by one and stops at the first command that fails. The script replaces `${url}` with the value of the `url` field and `${HOME}` with the home directory. Other shell variables are expanded when the command runs.
 
 For example, this entry clones fzf on installation and pulls the repository on update:
 

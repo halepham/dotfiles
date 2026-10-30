@@ -56,6 +56,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
@@ -126,7 +127,7 @@ parse_args() {
 # ----------------------------------------------------------------------------
 run() {
     if $DRY_RUN; then
-        echo -e "${BLUE}[DRY-RUN]${NC} $*"
+        echo -e "${PURPLE}[DRY-RUN]${NC} $*"
     else
         eval "$@"
     fi
@@ -309,7 +310,8 @@ with open(json_path) as f:
 def clean(s):
     return str(s).replace('\r', '').replace('\n', ' ').strip()
 
-SEP = " && "
+# List items (command / update) are separated by \x1e (record separator)
+SEP = "\x1e"
 
 tools = data.get("tools", [])
 
@@ -332,13 +334,15 @@ for tool in tools:
 EOF
 )"
 
-    while IFS=$'\x1f' read -r name type pkg url bucket cmds update_cmds; do
+    # Read the list on fd 3 so that commands which read stdin (fzf install,
+    # powershell, scoop, ...) cannot consume the remaining entries.
+    while IFS=$'\x1f' read -r -u 3 name type pkg url bucket cmds update_cmds; do
         [[ -z "$name" ]] && continue
         if ! _is_selected "$name"; then
             continue
         fi
         _install_tool "$name" "$type" "$pkg" "$url" "$bucket" "$cmds" "$update_cmds"
-    done <<< "$tools"
+    done 3<<< "$tools"
 }
 
 _install_tool() {
@@ -438,29 +442,19 @@ _install_tool() {
             }
             ;;
         git|archive)
-            set +e
             # Use the "update" commands when updating, if provided; otherwise re-run "command"
-            local cmd="$cmds"
+            local steps="$cmds"
             if [[ "$action" == "update" && -n "$update_cmds" ]]; then
-                cmd="$update_cmds"
+                steps="$update_cmds"
             fi
-            cmd="${cmd//\$\{url\}/$url}"
-            cmd="${cmd//\$\{HOME\}/$HOME}"
 
-            if ! $DRY_RUN; then
-                log_info "Running command: $cmd"
-                run "$cmd"
-                local exit_code=$?
-                if [[ $exit_code -ne 0 ]]; then
-                    log_error "${name}: command failed (exit code ${exit_code})"
-                    WARNINGS+=("${name}: ${action} failed.")
-                    set -e
-                    return
-                fi
-            else
-                run "$cmd"
+            local step_list=()
+            IFS=$'\x1e' read -r -a step_list <<< "$steps"
+
+            if ! _run_steps "$name" "$url" "${step_list[@]}"; then
+                WARNINGS+=("${name}: ${action} failed.")
+                return
             fi
-            set -e
             ;;
         *)
             log_warn "Unknown install type '${type}' for tool '${name}', skipping."
@@ -476,6 +470,41 @@ _install_tool() {
         INSTALLED_TOOLS+=("$name")
         log_success "${name} installed"
     fi
+}
+
+# ----------------------------------------------------------------------------
+# Run the commands of a git/archive tool one by one and stop at the first
+# failure. All commands of a tool run in the same subshell, so a variable
+# assigned by one command is available to the next commands, but does not
+# leak into this script.
+# ----------------------------------------------------------------------------
+_run_steps() {
+    local name="$1"
+    local url="$2"
+    shift 2
+
+    (
+        set +e
+        local step rc
+        for step in "$@"; do
+            [[ -z "$step" ]] && continue
+            step="${step//\$\{url\}/$url}"
+            step="${step//\$\{HOME\}/$HOME}"
+
+            if $DRY_RUN; then
+                run "$step"
+                continue
+            fi
+
+            log_info "$step"
+            eval "$step"
+            rc=$?
+            if [[ $rc -ne 0 ]]; then
+                log_error "${name}: command failed (exit code ${rc}): $step"
+                exit "$rc"
+            fi
+        done
+    )
 }
 
 # ----------------------------------------------------------------------------
@@ -626,7 +655,9 @@ EOF
 )"
 
     local current_name=""
-    while IFS='|' read -r name type source target override marker; do
+    # Read the list on fd 3 so that commands which read stdin (powershell, ...)
+    # cannot consume the remaining entries.
+    while IFS='|' read -r -u 3 name type source target override marker; do
         [[ -z "$name" ]] && continue
 
         # Print info header once per setup group
@@ -662,7 +693,7 @@ EOF
                 log_warn "Unknown setup type '${type}' for '${name}', skipping."
                 ;;
         esac
-    done <<< "$setups"
+    done 3<<< "$setups"
 }
 
 # ----------------------------------------------------------------------------
@@ -676,8 +707,8 @@ print_summary() {
     fi
 
     if $DRY_RUN; then
-        echo -e "${BLUE}[DRY-RUN] Dry-run mode is ON. No commands were actually executed.${NC}"
-        echo -e "${BLUE}[DRY-RUN] Re-run without --dry-run to apply changes.${NC}"
+        echo -e "${PURPLE}[DRY-RUN] Dry-run mode is ON. No commands were actually executed.${NC}"
+        echo -e "${PURPLE}[DRY-RUN] Re-run without --dry-run to apply changes.${NC}"
     fi
 
     if [[ ${#INSTALLED_TOOLS[@]} -gt 0 ]]; then
