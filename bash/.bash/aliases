@@ -106,7 +106,7 @@ gh() {
             --format='%C(bold green)%cd %C(auto)%h%d %s %C(cyan)(%an)'    \
             --graph                                                       \
             --color=always                                                \
-            $@                                                            |
+            "$@"                                                          |
     fzf --ansi                                                            \
         --no-sort                                                         \
         --reverse                                                         \
@@ -121,10 +121,10 @@ gh() {
 
 ### FZF ###
 _fzf_compgen_path() {
-    $FZF_DEFAULT_COMMAND . "$1"
+    fd --hidden --follow --exclude .git --exclude node_modules . "$1"
 }
 _fzf_compgen_dir() {
-    $FZF_DEFAULT_COMMAND --type d . "$1"
+    fd --hidden --follow --exclude .git --exclude node_modules --type d . "$1"
 }
 
 #fzf open file
@@ -134,9 +134,7 @@ fe() {
         --ansi                                                              \
         -q "$1"                                                             \
         --bind 'enter:execute(nvim {+})'                                    \
-        --preview '([[ -f {} ]] && (bat -n --color=always {} || cat {})) || \
-                   ([[ -d {} ]] && (tree -C {} | less)) ||                  \
-                   file {} 2> /dev/null | head -200'
+        --preview "$_FZF_PREVIEW_CMD"
 }
 
 # find-in-file - usage: fif <SEARCH_TERM>
@@ -152,10 +150,9 @@ fif() {
        --smart-case                      \
        --no-messages                     \
        "$1"                              |
-    fzf $FZF_PREVIEW_WINDOW              \
-        --bind 'enter:execute(nvim {+})' \
+    fzf --bind 'enter:execute(nvim {+})' \
         --preview "rg --smart-case       \
                       --pretty           \
                       --context 5        \
-                      '$1' {}"
+                      -- ${1@Q} {}"
 }

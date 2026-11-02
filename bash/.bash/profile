@@ -45,9 +45,14 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # ALT-C's command
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 
-export FZF_CTRL_T_OPTS="--preview '([[ -f {} ]] && (bat -n --color=always {} || cat {})) || \
-                                   ([[ -d {} ]] && (tree -C {} | less)) ||                  \
-                                   echo {} 2> /dev/null | head -200'"
+# Shared previewer: bat for files, tree (fallback ls) for directories
+_FZF_PREVIEW_CMD="if [[ -d {} ]]; then                                    \
+                      tree -C {} 2> /dev/null || ls -AF --color=always {}; \
+                  else                                                    \
+                      bat -n --color=always --line-range :500 {}          \
+                          2> /dev/null || head -500 {};                   \
+                  fi"
+export FZF_CTRL_T_OPTS="--preview '$_FZF_PREVIEW_CMD'"
 export FZF_CTRL_R_OPTS="--preview 'echo {2..}' --preview-window down:3:wrap"
-export FZF_ALT_C_OPTS="--preview '((tree -C {} | less) || file {}) 2> /dev/null | head -200'"
+export FZF_ALT_C_OPTS="--preview '$_FZF_PREVIEW_CMD'"
 export FZF_TMUX_OPTS='-p90%,60%'
