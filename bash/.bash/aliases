@@ -49,6 +49,11 @@ alias csd='conda deactivate'
     curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
 }
 
+# remove cache and old extension of vscode server
+clean_vscode() {
+    curl -sL https://gist.githubusercontent.com/XDflight/5f3509eb84fc282b88059c909036f5bc/raw/fe2a3e7dab19160c17efc7025d138f5350964c0f/clean_vscode-server.sh | bash -s
+}
+
 ### git + FZF ###
 is_in_git_repo() {
     git rev-parse HEAD > /dev/null 2>&1
